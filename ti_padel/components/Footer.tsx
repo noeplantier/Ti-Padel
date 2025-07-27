@@ -22,7 +22,7 @@ export function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><a href="#" className="hover:text-white transition-colors">Cours Collectifs</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Cours Particuliers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Randonnées Paddle</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Clubs Paddle</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Stages Intensifs</a></li>
             </ul>
           </div>
@@ -42,8 +42,8 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <div className="space-y-2 text-gray-400 mb-6">
-              <p>Port de Plaisance</p>
-              <p>29170 Fouesnant</p>
+              <p>Club Ti Paddle</p>
+              <p>22200 Guingamp</p>
               <p>+33 2 98 56 78 90</p>
               <p>contact@tipaddle.fr</p>
             </div>

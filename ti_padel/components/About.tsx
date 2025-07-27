@@ -21,7 +21,7 @@ export function About() {
     {
       icon: Waves,
       title: 'Tradition',
-      description: 'Héritage maritime breton respecté'
+      description: 'Héritage breton respecté'
     }
   ];
 
@@ -34,8 +34,8 @@ export function About() {
               L'esprit Ti Paddle
             </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Ancrés dans la tradition maritime bretonne, nous partageons notre passion du paddle sport 
-              depuis plus de 10 ans. Notre école, située sur les magnifiques côtes bretonnes, 
+              Ancrés dans la tradition bretonne, nous partageons notre passion du paddle 
+              depuis plus de 2 ans. Notre club, située sur la ville de Guingamp, 
               offre un cadre exceptionnel pour découvrir ou perfectionner cette discipline.
             </p>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">

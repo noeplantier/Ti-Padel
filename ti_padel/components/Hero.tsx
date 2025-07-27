@@ -13,19 +13,15 @@ export function Hero() {
     <section id="accueil" className="relative min-h-screen flex items-center justify-center hero-gradient celtic-pattern">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
-          {/* Hero Badge */}
-          <div className="inline-flex items-center space-x-2 bg-black/5 rounded-full px-6 py-2 mb-8">
-            <Star className="h-4 w-4 text-black" />
-            <span className="text-sm font-medium text-gray-700">Centre d'excellence paddle en Bretagne</span>
-          </div>
+   
 
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold text-black mb-6 tracking-tight">
+          <h1 className="text-6xl mt-3 md:text-8xl font-bold text-black mb-6 tracking-tight">
             Ti Paddle
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
-            Découvrez le paddle sport dans les eaux bretonnes
+            Découvrez le paddle dans toute sa splendeur.
           </p>
           
           <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
@@ -33,10 +29,17 @@ export function Hero() {
             Réservez votre session dès maintenant.
           </p>
 
+                 {/* Hero Badge */}
+                 <div className="inline-flex items-center space-x-2 bg-black/5 rounded-full px-6 py-2 mb-8">
+            <Star className="h-4 w-4 text-black" />
+            <span className="text-sm font-medium text-gray-700">Centre d'excellence paddle en Bretagne</span>
+          </div>
+          <br></br>
+
           {/* Location Badge */}
           <div className="inline-flex items-center space-x-2 bg-white/80 rounded-full px-4 py-2 mb-12 border border-gray-200">
             <MapPin className="h-4 w-4 text-gray-600" />
-            <span className="text-sm text-gray-600">Côtes bretonnes, France</span>
+            <span className="text-sm text-gray-600">Guingamp, France</span>
           </div>
 
           {/* CTA Buttons */}

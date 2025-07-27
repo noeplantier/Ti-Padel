@@ -28,8 +28,8 @@ export function Contact() {
                   <div>
                     <h3 className="font-semibold text-black mb-2">Adresse</h3>
                     <p className="text-gray-600">
-                      Port de Plaisance<br />
-                      29170 Fouesnant<br />
+                      Club Ti Paddle<br />
+                      22000 Guingamp<br />
                       Bretagne, France
                     </p>
                   </div>

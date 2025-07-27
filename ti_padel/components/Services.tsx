@@ -21,8 +21,8 @@ export function Services() {
     },
     {
       icon: Compass,
-      title: 'Randonnées Paddle',
-      description: 'Explorez les côtes bretonnes lors de sorties guidées exceptionnelles.',
+      title: 'Clubs Paddle',
+      description: 'Venez jouer dans nos clubs Ti Paddle pour des sessions amicales et compétitives.',
       price: '45€',
       duration: '2h',
       features: ['Guide expérimenté', 'Sites secrets', 'Collation incluse']
