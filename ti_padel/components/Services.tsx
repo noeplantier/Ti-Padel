@@ -21,8 +21,8 @@ export function Services() {
     },
     {
       icon: Compass,
-      title: 'Clubs Paddle',
-      description: 'Venez jouer dans nos clubs Ti Paddle pour des sessions amicales et compétitives.',
+      title: 'Clubs Padel',
+      description: 'Venez jouer dans nos clubs Ti Padel pour des sessions amicales et compétitives.',
       price: '45€',
       duration: '2h',
       features: ['Guide expérimenté', 'Sites secrets', 'Collation incluse']
@@ -43,7 +43,7 @@ export function Services() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-black mb-4">Nos Services</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Des cours adaptés à tous les niveaux pour découvrir ou perfectionner votre technique de paddle
+            Des cours adaptés à tous les niveaux pour découvrir ou perfectionner votre technique de Padel
           </p>
         </div>
 

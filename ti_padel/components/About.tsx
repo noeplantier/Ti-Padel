@@ -31,10 +31,10 @@ export function About() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div>
             <h2 className="text-4xl font-bold text-black mb-6">
-              L'esprit Ti Paddle
+              L'esprit Ti Padel
             </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
-              Ancrés dans la tradition bretonne, nous partageons notre passion du paddle 
+              Ancrés dans la tradition bretonne, nous partageons notre passion du Padel 
               depuis plus de 2 ans. Notre club, située sur la ville de Guingamp, 
               offre un cadre exceptionnel pour découvrir ou perfectionner cette discipline.
             </p>
@@ -45,8 +45,8 @@ export function About() {
             <div className="bg-black/5 rounded-lg p-6">
               <h3 className="font-semibold text-black mb-2">Notre engagement</h3>
               <p className="text-gray-600">
-                Transmission de la culture maritime bretonne à travers une approche moderne 
-                et sécurisée du paddle sport.
+                Transmission de la culture bretonne à travers une approche moderne 
+                et sécurisée du Padel sport.
               </p>
             </div>
           </div>

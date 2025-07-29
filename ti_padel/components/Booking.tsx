@@ -26,7 +26,7 @@ export function Booking() {
   const services = [
     { id: 'collectif', name: 'Cours Collectif', price: 35 },
     { id: 'particulier', name: 'Cours Particulier', price: 80 },
-    { id: 'randonnee', name: 'Randonnée Paddle', price: 45 },
+    { id: 'randonnee', name: 'Randonnée Padel', price: 45 },
     { id: 'stage', name: 'Stage Intensif', price: 280 }
   ];
 
@@ -51,7 +51,7 @@ export function Booking() {
         <div className="text-center mb-16">
           <h2 className="text-4xl font-bold text-black mb-4">Réservation</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Choisissez votre créneau et réservez votre session de paddle en quelques clics
+            Choisissez votre créneau et réservez votre session de Padel en quelques clics
           </p>
         </div>
 

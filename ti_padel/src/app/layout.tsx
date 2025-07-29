@@ -5,8 +5,8 @@ import { Inter } from 'next/font/google';
 const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Ti Paddle - Réservation de cours de paddle en Bretagne',
-  description: 'Réservez vos cours de paddle sport en Bretagne. Ti Paddle propose des sessions d\'entraînement pour tous niveaux dans un cadre exceptionnel.',
+  title: 'Ti Padel - Réservation de cours de Padel en Bretagne',
+  description: 'Réservez vos cours de Padel sport en Bretagne. Ti Padel propose des sessions d\'entraînement pour tous niveaux dans un cadre exceptionnel.',
 };
 
 export default function RootLayout({

@@ -17,11 +17,11 @@ export function Hero() {
 
           {/* Main Heading */}
           <h1 className="text-6xl mt-3 md:text-8xl font-bold text-black mb-6 tracking-tight">
-            Ti Paddle
+            Ti Padel
           </h1>
           
           <p className="text-xl md:text-2xl text-gray-600 mb-4 max-w-3xl mx-auto leading-relaxed">
-            Découvrez le paddle dans toute sa splendeur.
+            Découvrez le Padel dans toute sa splendeur.
           </p>
           
           <p className="text-lg text-gray-500 mb-12 max-w-2xl mx-auto">
@@ -32,7 +32,7 @@ export function Hero() {
                  {/* Hero Badge */}
                  <div className="inline-flex items-center space-x-2 bg-black/5 rounded-full px-6 py-2 mb-8">
             <Star className="h-4 w-4 text-black" />
-            <span className="text-sm font-medium text-gray-700">Centre d'excellence paddle en Bretagne</span>
+            <span className="text-sm font-medium text-gray-700">Centre d'excellence Padel en Bretagne</span>
           </div>
           <br></br>
 

@@ -9,10 +9,10 @@ export function Footer() {
           <div>
             <div className="flex items-center space-x-2 mb-6">
               <Waves className="h-8 w-8 text-white" />
-              <span className="text-2xl font-bold">Ti Paddle</span>
+              <span className="text-2xl font-bold">Ti Padel</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
-              École de paddle sport en Bretagne. Découvrez les joies du paddle dans un cadre exceptionnel.
+              École de Padel sport en Bretagne. Découvrez les joies du Padel dans un cadre exceptionnel.
             </p>
           </div>
 
@@ -22,7 +22,7 @@ export function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li><a href="#" className="hover:text-white transition-colors">Cours Collectifs</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Cours Particuliers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Clubs Paddle</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Clubs Padel</a></li>
               <li><a href="#" className="hover:text-white transition-colors">Stages Intensifs</a></li>
             </ul>
           </div>
@@ -42,10 +42,10 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <div className="space-y-2 text-gray-400 mb-6">
-              <p>Club Ti Paddle</p>
+              <p>Club Ti Padel</p>
               <p>22200 Guingamp</p>
               <p>+33 2 98 56 78 90</p>
-              <p>contact@tipaddle.fr</p>
+              <p>contact@tiPadel.fr</p>
             </div>
             
             <div className="flex space-x-4">
@@ -64,7 +64,7 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 text-sm">
-            © 2024 Ti Paddle. Tous droits réservés.
+            © 2024 Ti Padel. Tous droits réservés.
           </p>
           <p className="text-gray-400 text-sm mt-4 md:mt-0">
             Fait avec ❤️ en Bretagne

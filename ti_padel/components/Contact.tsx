@@ -28,7 +28,7 @@ export function Contact() {
                   <div>
                     <h3 className="font-semibold text-black mb-2">Adresse</h3>
                     <p className="text-gray-600">
-                      Club Ti Paddle<br />
+                      Club Ti Padel<br />
                       22000 Guingamp<br />
                       Bretagne, France
                     </p>
@@ -59,7 +59,7 @@ export function Contact() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-black mb-2">Email</h3>
-                    <p className="text-gray-600">contact@tipaddle.fr</p>
+                    <p className="text-gray-600">contact@tiPadel.fr</p>
                   </div>
                 </div>
               </CardContent>

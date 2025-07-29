@@ -30,7 +30,7 @@ export function Navigation() {
         <div className="flex items-center justify-between h-16">
           <div className="flex items-center space-x-2">
             <Waves className="h-8 w-8 text-black" />
-            <span className="text-2xl font-bold text-black">Ti Paddle</span>
+            <span className="text-2xl font-bold text-black">Ti Padel</span>
           </div>
 
           {/* Desktop Navigation */}
