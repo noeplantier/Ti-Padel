@@ -53,12 +53,7 @@ export function Navigation() {
             >
               À Propos
             </button>
-            <button 
-              onClick={() => scrollToSection('reservation')}
-              className="text-gray-700 hover:text-black transition-colors duration-200"
-            >
-              Réservation
-            </button>
+
             <button 
               onClick={() => scrollToSection('contact')}
               className="text-gray-700 hover:text-black transition-colors duration-200"

@@ -45,7 +45,7 @@ export function Footer() {
               <p>Club Ti Padel</p>
               <p>22200 Guingamp</p>
               <p>+33 2 98 56 78 90</p>
-              <p>contact@tiPadel.fr</p>
+              <p>acardi81@gmail.com</p>
             </div>
             
             <div className="flex space-x-4">

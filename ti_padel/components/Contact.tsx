@@ -59,7 +59,7 @@ export function Contact() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-black mb-2">Email</h3>
-                    <p className="text-gray-600">contact@tiPadel.fr</p>
+                    <p className="text-gray-600">acardi81@gmail.com</p>
                   </div>
                 </div>
               </CardContent>
@@ -109,8 +109,8 @@ export function Contact() {
 
                 <div>
                   <Label htmlFor="contact-message">Message</Label>
-                  <Textarea 
-                    id="contact-message" 
+                  <Textarea
+                    id="contact-message"
                     placeholder="Votre message..."
                     rows={6}
                   />
