@@ -92,8 +92,8 @@ export function CourtsPage() {
                                     <Button
                                         onClick={() => toggleCourtStatus(court.id)}
                                         className={court.occupied
-                                            ? 'w-full bg-green-600 hover:bg-green-700'
-                                            : 'w-full bg-red-600 hover:bg-red-700'}
+                                            ? 'w-full bg-black'
+                                            : 'w-full bg-black'}
                                     >
                                         {court.occupied ? 'Libérer le terrain' : 'Occuper le terrain'}
                                     </Button>
