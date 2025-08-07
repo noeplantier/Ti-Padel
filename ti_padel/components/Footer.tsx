@@ -8,7 +8,6 @@ export function Footer() {
           {/* Brand */}
           <div>
             <div className="flex items-center space-x-2 mb-6">
-              <Waves className="h-8 w-8 text-white" />
               <span className="text-2xl font-bold">Ti Padel</span>
             </div>
             <p className="text-gray-400 leading-relaxed">
