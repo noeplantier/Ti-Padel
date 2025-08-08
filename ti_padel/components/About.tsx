@@ -11,7 +11,7 @@ export function About() {
     {
       icon: Heart,
       title: 'Passion',
-      description: 'Amour authentique des sports nautiques'
+      description: 'Amour authentique des sports de raquette'
     },
     {
       icon: Shield,

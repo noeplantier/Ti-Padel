@@ -1,38 +1,31 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, Trophy, Compass, Clock } from 'lucide-react';
+import { Users, Handshake , Beef, Cake} from 'lucide-react';
+
 
 export function Services() {
   const services = [
     {
       icon: Users,
-      title: 'Cours Collectifs',
+      title: 'Padel entre amis',
       description: 'Sessions en groupe pour apprendre ensemble dans une ambiance conviviale.',
-      price: '35€',
-      duration: '1h30',
       features: ['Groupe de 6 max', 'Équipement inclus', 'Tous niveaux']
     },
     {
-      icon: Trophy,
-      title: 'Cours Particuliers',
+      icon: Beef,
+      title: 'Petite restauration',
       description: 'Coaching personnalisé pour progresser rapidement avec un instructeur dédié.',
-      price: '80€',
-      duration: '1h',
       features: ['Coaching 1:1', 'Programme sur mesure', 'Suivi personnalisé']
     },
     {
-      icon: Compass,
-      title: 'Clubs Padel',
+      icon: Handshake,
+      title: 'Séminaires d\'entreprise',
       description: 'Venez jouer dans nos clubs Ti Padel pour des sessions amicales et compétitives.',
-      price: '45€',
-      duration: '2h',
-      features: ['Guide expérimenté', 'Sites secrets', 'Collation incluse']
+      features: ['Coach expérimenté', 'Conseils sportifs', 'Collation incluse']
     },
     {
-      icon: Clock,
-      title: 'Stages Intensifs',
+      icon: Cake,
+      title: 'Organisation d\'évenements',
       description: 'Perfectionnement technique sur plusieurs jours pour tous niveaux.',
-      price: '280€',
-      duration: '3 jours',
       features: ['Formation complète', 'Certificat', 'Matériel professionnel']
     }
   ];

@@ -29,7 +29,7 @@ export function Contact() {
                     <h3 className="font-semibold text-black mb-2">Adresse</h3>
                     <p className="text-gray-600">
                       Club Ti Padel<br />
-                      22000 Guingamp<br />
+                      56150 Baud<br />
                       Bretagne, France
                     </p>
                   </div>
@@ -59,7 +59,7 @@ export function Contact() {
                   </div>
                   <div>
                     <h3 className="font-semibold text-black mb-2">Email</h3>
-                    <p className="text-gray-600">acardi81@gmail.com</p>
+                    <p className="text-gray-600">tipadelbaud@gmail.com</p>
                   </div>
                 </div>
               </CardContent>
@@ -74,8 +74,7 @@ export function Contact() {
                   <div>
                     <h3 className="font-semibold text-black mb-2">Horaires</h3>
                     <div className="text-gray-600 space-y-1">
-                      <p>Lun - Ven: 9h - 18h</p>
-                      <p>Sam - Dim: 8h - 19h</p>
+                      <p>Lun - Dim: 9h - 22h30</p>
                       <p className="text-sm">Fermé le dimanche en hiver</p>
                     </div>
                   </div>

@@ -66,7 +66,7 @@ export function Footer() {
             © 2024 Ti Padel. Tous droits réservés.
           </p>
           <p className="text-gray-400 text-sm mt-4 md:mt-0">
-            Fait avec ❤️ en Bretagne
+            Fait avec  🤍 en Bretagne
           </p>
         </div>
       </div>

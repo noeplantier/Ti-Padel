@@ -20,10 +20,8 @@ export function RacketRental() {
     const [selectedRacket, setSelectedRacket] = useState<number | null>(null);
 
     const rackets: Racket[] = [
-        { id: 1, brand: 'Bullpadel', model: 'Vertex 2', weight: '370g', balance: 'Équilibrée', price: 5.0 },
-        { id: 2, brand: 'Adidas', model: 'Delta Pro', weight: '375g', balance: 'Tête lourde', price: 6.0 },
-        { id: 3, brand: 'Head', model: 'Speed Lite', weight: '360g', balance: 'Manche lourd', price: 5.5 },
-        { id: 4, brand: 'Siux', model: 'Firebolt 3', weight: '365g', balance: 'Équilibrée', price: 6.5 },
+        { id: 1, brand: 'Location Raquette', model: '', weight: '370g', balance: 'Équilibrée', price: 2.0 },
+
     ];
 
     const toggleRacketRental = () => {

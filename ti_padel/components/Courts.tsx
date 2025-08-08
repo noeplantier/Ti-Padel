@@ -21,8 +21,7 @@ export function CourtsPage() {
         { id: 2, name: 'Terrain B', type: 'extérieur', surface: 'synthétique', occupied: true, hourlyRate: 12.5 },
         { id: 3, name: 'Terrain C', type: 'intérieur', surface: 'synthétique', occupied: false, hourlyRate: 12.5 },
         { id: 4, name: 'Terrain D', type: 'intérieur', surface: 'synthétique', occupied: false, hourlyRate: 12.5 },
-        { id: 5, name: 'Terrain E', type: 'extérieur', surface: 'herbe', occupied: true, hourlyRate: 12.5 },
-        { id: 6, name: 'Terrain F', type: 'extérieur', surface: 'béton', occupied: false, hourlyRate: 12.5 },
+
     ]);
 
     const toggleCourtStatus = (id: number) => {
@@ -34,13 +33,13 @@ export function CourtsPage() {
     // Composant simple pour représenter un terrain de padel
     const CourtVisual = ({ court }: { court: Court }) => (
         <div className="relative">
-            <div className={`w-24 h-16 mx-auto rounded border-2 ${court.occupied ? 'border-red-500 bg-red-100' : 'border-green-500 bg-green-100'} flex items-center justify-center`}>
+            <div className={`w-24 h-16 mx-auto rounded border-2 ${court.occupied ? 'bg-gray-200' : 'border-green-500 bg-green-100'} flex items-center justify-center`}>
         <span className="text-xs font-bold text-center px-1">
           {court.name}
         </span>
             </div>
             {court.occupied && (
-                <Badge className="absolute -top-2 -right-2 bg-red-500">Occupé</Badge>
+                <Badge className="absolute -top-2 -right-2 bg-gray-500">Occupé</Badge>
             )}
         </div>
     );
