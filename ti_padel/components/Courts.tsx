@@ -33,14 +33,12 @@ export function CourtsPage() {
     // Composant simple pour représenter un terrain de padel
     const CourtVisual = ({ court }: { court: Court }) => (
         <div className="relative">
-            <div className={`w-24 h-16 mx-auto rounded border-2 ${court.occupied ? 'bg-gray-200' : 'border-green-500 bg-green-100'} flex items-center justify-center`}>
+            <div className={`w-24 h-16 mx-auto rounded border-2 ${court.occupied ? 'bg-gray-200 border-gray-200' : 'border-green-500 bg-green-100'} flex items-center justify-center`}>
         <span className="text-xs font-bold text-center px-1">
           {court.name}
         </span>
             </div>
-            {court.occupied && (
-                <Badge className="absolute -top-2 -right-2 bg-gray-500">Occupé</Badge>
-            )}
+
         </div>
     );
 
@@ -50,7 +48,7 @@ export function CourtsPage() {
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Terrains de Padel</h1>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Découvrez nos terrains de padel et réservez celui qui vous convient. Tarif: 12,50€/heure
+                        Découvrez nos terrains de padel et réservez celui qui vous convient. <br></br>Tarif: 12,50€/90min
                     </p>
                 </div>
 
@@ -69,7 +67,7 @@ export function CourtsPage() {
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Détails des terrains</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courts.map((court) => (
-                            <Card key={court.id} className={court.occupied ? 'border-red-200' : 'border-green-200'}>
+                            <Card key={court.id} className={court.occupied ? 'border-gray-200' : 'border-green-200'}>
                                 <CardHeader>
                                     <div className="flex justify-between items-start">
                                         <div>
@@ -78,9 +76,7 @@ export function CourtsPage() {
                                                 <span className="capitalize">{court.type}</span> - Surface {court.surface}
                                             </CardDescription>
                                         </div>
-                                        <Badge variant={court.occupied ? 'destructive' : 'secondary'}>
-                                            {court.occupied ? 'Occupé' : 'Disponible'}
-                                        </Badge>
+
                                     </div>
                                 </CardHeader>
                                 <CardContent>
@@ -89,12 +85,13 @@ export function CourtsPage() {
                                         <span className="text-sm text-gray-500">Places: illimité</span>
                                     </div>
                                     <Button
-                                        onClick={() => toggleCourtStatus(court.id)}
+                                        onClick={() => !court.occupied && toggleCourtStatus(court.id)}
                                         className={court.occupied
-                                            ? 'w-full bg-black'
-                                            : 'w-full bg-black'}
+                                            ? 'w-full bg-black hover:bg-gray-800'
+                                            : 'w-full bg-black hover:bg-gray-800'}
+                                        disabled={court.occupied}
                                     >
-                                        {court.occupied ? 'Libérer le terrain' : 'Occuper le terrain'}
+                                        {court.occupied ? 'Libérer ce terrain' : 'Réserver ce terrain'}
                                     </Button>
                                 </CardContent>
                             </Card>

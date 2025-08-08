@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import { MapPin, Phone, Mail, Clock } from 'lucide-react';
+import {MapPin, Phone, Mail, Clock, Instagram, Facebook} from 'lucide-react';
 
 export function Contact() {
   return (
@@ -46,6 +46,22 @@ export function Contact() {
                   <div>
                     <h3 className="font-semibold text-black mb-2">Téléphone</h3>
                     <p className="text-gray-600">+33 2 98 56 78 90</p>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+
+            <Card className="border-0 shadow-sm">
+              <CardContent className="p-6">
+                <div className="flex items-start space-x-4">
+                  <div className="p-2 bg-black/5 rounded-lg">
+c                  </div>
+                  <div>
+                    <h3 className="font-semibold text-black mb-2">Réseaux</h3>
+                    <Instagram className="h-6 w-6 text-black" />
+                    <Facebook className="h-6 w-6 text-black" />
+
                   </div>
                 </div>
               </CardContent>

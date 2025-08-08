@@ -24,7 +24,7 @@ export function Services() {
     },
     {
       icon: Cake,
-      title: 'Organisation d\'évenements',
+      title: 'Évenements',
       description: 'Perfectionnement technique sur plusieurs jours pour tous niveaux.',
       features: ['Formation complète', 'Certificat', 'Matériel professionnel']
     }

@@ -28,10 +28,10 @@ export function Booking() {
   });
 
   const services = [
-    { id: 'collectif', name: 'Cours Collectif', price: 35 },
-    { id: 'particulier', name: 'Cours Particulier', price: 80 },
-    { id: 'randonnee', name: 'Randonnée Padel', price: 45 },
-    { id: 'stage', name: 'Stage Intensif', price: 280 }
+    { id: 'collectif', name: 'Padel entre amis', price: 35 },
+    { id: 'particulier', name: 'Petite restauration', price: 80 },
+    { id: 'randonnee', name: 'Séminaires d\'entreprise', price: 45 },
+    { id: 'stage', name: 'Évenements', price: 280 }
   ];
 
   const timeSlots = [

@@ -54,13 +54,30 @@ export function Navigation() {
               >
                 Services
               </button>
+              <Link
+                  href="/courts"
+                  className="text-gray-700 hover:text-black transition-colors duration-200"
+              >
+                Terrains
+              </Link>
+              <Link
+                  href="/menu"
+                  className="text-gray-700 hover:text-black transition-colors duration-200"
+              >
+                Carte
+              </Link>
+              <Link
+                  href="/racket-rental"
+                  className="text-gray-700 hover:text-black transition-colors duration-200"
+              >
+                Location
+              </Link>
               <button
                   onClick={() => scrollToSection('propos')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
               >
                 À Propos
               </button>
-
               <button
                   onClick={() => scrollToSection('contact')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
@@ -103,30 +120,44 @@ export function Navigation() {
                   >
                     Services
                   </button>
+                  <Link
+                      href="/courts"
+                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                  >
+                    Terrains
+                  </Link>
+                  <Link
+                      href="/menu"
+                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                  >
+                    Carte
+                  </Link>
+                  <Link
+                      href="/racket-rental"
+                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      onClick={() => setIsMenuOpen(false)}
+                  >
+                    Location
+                  </Link>
                   <button
                       onClick={() => scrollToSection('propos')}
                       className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
                   >
                     À Propos
                   </button>
-                  <Link
-                      href="/reservation"
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                  >
-                    Réservation
-                  </Link>
-                  <button
-                      onClick={() => scrollToSection('reservation')}
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
-                  >
-                    Réservation
-                  </button>
                   <button
                       onClick={() => scrollToSection('contact')}
                       className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
                   >
                     Contact
+                  </button>
+                  <button
+                      onClick={() => scrollToSection('reservation')}
+                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                  >
+                    Réservation
                   </button>
                   <div className="px-3 py-2">
                     <Button
