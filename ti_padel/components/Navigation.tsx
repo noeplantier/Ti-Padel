@@ -54,24 +54,24 @@ export function Navigation() {
               >
                 Services
               </button>
-              <Link
-                  href="/courts"
+              <button
+                  onClick={() => scrollToSection('terrains')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
               >
                 Terrains
-              </Link>
-              <Link
-                  href="/menu"
+              </button>
+              <button
+                  onClick={() => scrollToSection('carte')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
               >
                 Carte
-              </Link>
-              <Link
-                  href="/racket-rental"
+              </button>
+              <button
+                  onClick={() => scrollToSection('location')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
               >
                 Location
-              </Link>
+              </button>
               <button
                   onClick={() => scrollToSection('propos')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"

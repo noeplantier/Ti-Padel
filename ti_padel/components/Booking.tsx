@@ -83,7 +83,7 @@ export function Booking() {
                     <SelectContent>
                       {services.map(service => (
                         <SelectItem key={service.id} value={service.id}>
-                          {service.name} - {service.price}€
+                          {service.name}
                         </SelectItem>
                       ))}
                     </SelectContent>

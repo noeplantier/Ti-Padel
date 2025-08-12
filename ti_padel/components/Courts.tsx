@@ -43,7 +43,7 @@ export function CourtsPage() {
     );
 
     return (
-        <div className="min-h-screen bg-white py-12">
+        <section id="terrains" className="py-24 bg-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Terrains de Padel</h1>
@@ -119,6 +119,6 @@ export function CourtsPage() {
                     </div>
                 </div>
             </div>
-        </div>
+        </section>
     );
 }
