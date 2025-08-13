@@ -62,17 +62,18 @@ export function Navigation() {
                 À Propos
               </button>
               <button
-                  onClick={() => scrollToSection('reservation')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-              >
-                Réserver
-              </button>
-              <button
                   onClick={() => scrollToSection('terrains')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Terrains
               </button>
+              <button
+                  onClick={() => scrollToSection('reservation')}
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+              >
+                Réserver
+              </button>
+
               <button
                   onClick={() => scrollToSection('carte')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
@@ -129,17 +130,18 @@ export function Navigation() {
                     À Propos
                   </button>
                   <button
-                      onClick={() => scrollToSection('reservation')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Réserver
-                  </button>
-                  <button
                       onClick={() => scrollToSection('terrains')}
                       className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
                   >
                     Terrains
                   </button>
+                  <button
+                      onClick={() => scrollToSection('reservation')}
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                  >
+                    Réserver
+                  </button>
+
                   <button
                       onClick={() => scrollToSection('carte')}
                       className="gradient-underline-effect text-gray-900 hover:text-black font-bold"

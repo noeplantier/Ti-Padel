@@ -16,8 +16,8 @@ export default function Home() {
             <Hero />
             <Services />
             <About />
-            <Booking />
             <CourtsPage />
+            <Booking />
             <MenuPage />
             <RacketRental />
             <Contact />
