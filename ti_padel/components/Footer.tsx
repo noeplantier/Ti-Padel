@@ -1,4 +1,4 @@
-import { Waves, Facebook, Instagram, Mail } from 'lucide-react';
+import {Waves, Facebook, Instagram, Mail, LinkedinIcon, MessageCircle} from 'lucide-react';
 
 export function Footer() {
   return (
@@ -43,11 +43,12 @@ export function Footer() {
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <div className="space-y-2 text-gray-400 mb-6">
               <p>Club Ti Padel</p>
-              <p>22200 Guingamp</p>
+              <p>56150 Baud</p>
               <p>+33 2 98 56 78 90</p>
-              <p>acardi81@gmail.com</p>
+              <p>tipadelbaud@gmail.com
+              </p>
             </div>
-            
+
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
                 <Facebook className="h-5 w-5" />
@@ -56,7 +57,10 @@ export function Footer() {
                 <Instagram className="h-5 w-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                <Mail className="h-5 w-5" />
+                <LinkedinIcon className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <MessageCircle className="h-5 w-5" />
               </a>
             </div>
           </div>

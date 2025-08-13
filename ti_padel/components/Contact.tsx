@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Label } from '@/components/ui/label';
-import {MapPin, Phone, Mail, Clock, Instagram, Facebook} from 'lucide-react';
+import {MapPin, Phone, Mail, Clock, BadgeCheck, Facebook, Instagram, LinkedinIcon, MessageCircle} from 'lucide-react';
 
 export function Contact() {
   return (
@@ -56,12 +56,24 @@ export function Contact() {
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
                   <div className="p-2 bg-black/5 rounded-lg">
-c                  </div>
+                    <BadgeCheck className="h-6 w-6 text-black" />
+                  </div>
                   <div>
                     <h3 className="font-semibold text-black mb-2">Réseaux</h3>
-                    <Instagram className="h-6 w-6 text-black" />
-                    <Facebook className="h-6 w-6 text-black" />
-
+                    <div className="flex space-x-4">
+                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                        <Facebook className="h-5 w-5" />
+                      </a>
+                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                        <Instagram className="h-5 w-5" />
+                      </a>
+                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                        <LinkedinIcon className="h-5 w-5" />
+                      </a>
+                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                        <MessageCircle className="h-5 w-5" />
+                      </a>
+                    </div>
                   </div>
                 </div>
               </CardContent>

@@ -55,6 +55,20 @@ export function Navigation() {
                 Services
               </button>
               <button
+                  onClick={() => scrollToSection('propos')}
+                  className="text-gray-700 hover:text-black transition-colors duration-200"
+              >
+                À Propos
+              </button>
+
+              <button
+                  onClick={() => scrollToSection('reservation')}
+                  className="text-gray-700 hover:text-black transition-colors duration-200"
+              >
+                Réserver
+              </button>
+
+              <button
                   onClick={() => scrollToSection('terrains')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
               >
@@ -72,24 +86,14 @@ export function Navigation() {
               >
                 Location
               </button>
-              <button
-                  onClick={() => scrollToSection('propos')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
-              >
-                À Propos
-              </button>
+
               <button
                   onClick={() => scrollToSection('contact')}
                   className="text-gray-700 hover:text-black transition-colors duration-200"
               >
                 Contact
               </button>
-              <Button
-                  onClick={() => scrollToSection('reservation')}
-                  className="bg-black text-white hover:bg-gray-800 transition-colors duration-200"
-              >
-                Réserver Maintenant
-              </Button>
+
             </div>
 
             {/* Mobile Menu Button */}
