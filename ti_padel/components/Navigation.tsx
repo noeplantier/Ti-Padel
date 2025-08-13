@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
 import Image from 'next/image';
+import '../src/app/globals.css';
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -28,7 +29,7 @@ export function Navigation() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto px-1  lg:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center space-x-2">
               <Image
@@ -44,52 +45,52 @@ export function Navigation() {
             <div className="hidden md:flex items-center space-x-8">
               <button
                   onClick={() => scrollToSection('accueil')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Accueil
               </button>
               <button
                   onClick={() => scrollToSection('services')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Services
               </button>
               <button
                   onClick={() => scrollToSection('propos')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 À Propos
               </button>
 
               <button
                   onClick={() => scrollToSection('reservation')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Réserver
               </button>
 
               <button
                   onClick={() => scrollToSection('terrains')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Terrains
               </button>
               <button
                   onClick={() => scrollToSection('carte')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
               >
                 Carte
               </button>
               <button
                   onClick={() => scrollToSection('location')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Location
               </button>
 
               <button
                   onClick={() => scrollToSection('contact')}
-                  className="text-gray-700 hover:text-black transition-colors duration-200"
+                  className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
               >
                 Contact
               </button>
@@ -114,65 +115,57 @@ export function Navigation() {
                 <div className="px-2 pt-2 pb-3 space-y-1">
                   <button
                       onClick={() => scrollToSection('accueil')}
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
                   >
                     Accueil
                   </button>
                   <button
                       onClick={() => scrollToSection('services')}
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
                   >
                     Services
                   </button>
-                  <Link
-                      href="/courts"
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                  >
-                    Terrains
-                  </Link>
-                  <Link
-                      href="/menu"
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                  >
-                    Carte
-                  </Link>
-                  <Link
-                      href="/racket-rental"
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
-                      onClick={() => setIsMenuOpen(false)}
-                  >
-                    Location
-                  </Link>
                   <button
                       onClick={() => scrollToSection('propos')}
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
                   >
                     À Propos
                   </button>
+
+                  <button
+                      onClick={() => scrollToSection('reservation')}
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                  >
+                    Réserver
+                  </button>
+
+                  <button
+                      onClick={() => scrollToSection('terrains')}
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                  >
+                    Terrains
+                  </button>
+                  <button
+                      onClick={() => scrollToSection('carte')}
+                      className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
+                  >
+                    Carte
+                  </button>
+                  <button
+                      onClick={() => scrollToSection('location')}
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                  >
+                    Location
+                  </button>
+
                   <button
                       onClick={() => scrollToSection('contact')}
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
+                      className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
                   >
                     Contact
                   </button>
-                  <button
-                      onClick={() => scrollToSection('reservation')}
-                      className="block px-3 py-2 text-gray-700 hover:text-black transition-colors duration-200"
-                  >
-                    Réservation
-                  </button>
-                  <div className="px-3 py-2">
-                    <Button
-                        onClick={() => scrollToSection('reservation')}
-                        className="w-full bg-black text-white hover:bg-gray-800"
-                    >
-                      Réserver Maintenant
-                    </Button>
                   </div>
                 </div>
-              </div>
           )}
         </div>
       </nav>
