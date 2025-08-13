@@ -1,9 +1,8 @@
 'use client';
-
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Menu, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
 import '../src/app/globals.css';
 
@@ -29,20 +28,21 @@ export function Navigation() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto px-1  lg:px-8">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center space-x-2">
+        <div className="max-w-7xl mx-auto px-0"> {/* px-0 pour supprimer les marges latérales */}
+          <div className="flex items-center justify-between h-16 w-full">
+            {/* Logo à l'extrême gauche, sans marge */}
+            <div className="ml-0">
               <Image
                   src="/images/tipadel-logo.png"
                   alt="Ti Padel Logo"
                   width={100}
                   height={100}
-                  className="h-50 w-50"
+                  className="shaking-image h-12 w-12"
               />
             </div>
 
-            {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            {/* Desktop Navigation centrée */}
+            <div className="hidden md:flex md:absolute md:left-1/2 md:transform md:-translate-x-1/2 items-center space-x-8">
               <button
                   onClick={() => scrollToSection('accueil')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
@@ -61,14 +61,12 @@ export function Navigation() {
               >
                 À Propos
               </button>
-
               <button
                   onClick={() => scrollToSection('reservation')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Réserver
               </button>
-
               <button
                   onClick={() => scrollToSection('terrains')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
@@ -77,7 +75,7 @@ export function Navigation() {
               </button>
               <button
                   onClick={() => scrollToSection('carte')}
-                  className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
+                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Carte
               </button>
@@ -87,14 +85,13 @@ export function Navigation() {
               >
                 Location
               </button>
+            </div>
 
-              <button
-                  onClick={() => scrollToSection('contact')}
-                  className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
-              >
-                Contact
-              </button>
-
+            {/* Panier à l'extrême droite, sans marge */}
+            <div className="hidden md:block mr-0">
+              <Link href="/backoffice/commandes" className="text-black">
+                <ShoppingCart className="h-8 w-8" />
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -131,14 +128,12 @@ export function Navigation() {
                   >
                     À Propos
                   </button>
-
                   <button
                       onClick={() => scrollToSection('reservation')}
                       className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
                   >
                     Réserver
                   </button>
-
                   <button
                       onClick={() => scrollToSection('terrains')}
                       className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
@@ -147,7 +142,7 @@ export function Navigation() {
                   </button>
                   <button
                       onClick={() => scrollToSection('carte')}
-                      className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
+                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
                   >
                     Carte
                   </button>
@@ -157,15 +152,11 @@ export function Navigation() {
                   >
                     Location
                   </button>
-
-                  <button
-                      onClick={() => scrollToSection('contact')}
-                      className="gradient-underline-effect  text-gray-900 hover:text-black font-bold"
-                  >
-                    Contact
-                  </button>
-                  </div>
+                  <Link href="/backoffice/commandes" className="text-gray-400 hover:text-black transition-colors">
+                    <ShoppingCart className="h-5 w-5" />
+                  </Link>
                 </div>
+              </div>
           )}
         </div>
       </nav>

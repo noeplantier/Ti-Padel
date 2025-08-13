@@ -20,10 +20,10 @@ export function Footer() {
           <div>
             <h3 className="font-semibold text-lg mb-4">Services</h3>
             <ul className="space-y-2 text-gray-400">
-              <li><a href="#" className="hover:text-white transition-colors">Cours Collectifs</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Cours Particuliers</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Clubs Padel</a></li>
-              <li><a href="#" className="hover:text-white transition-colors">Stages Intensifs</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Padel entre amis</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Petite restauration</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Petite restauration</a></li>
+              <li><a href="#" className="hover:text-white transition-colors">Évenements</a></li>
             </ul>
           </div>
 

@@ -39,7 +39,7 @@ export function RacketRental() {
                 <div className="text-center mb-12">
                     <h2 className="text-3xl font-bold text-gray-900 mb-4">Location de raquettes de padel</h2>
                     <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Vous n'avez pas de raquette ? Pas de problème ! Louez une de nos raquettes professionnelles.
+                        Vous n'avez pas de raquette ? Pas de problème !<br></br> Louez une de nos raquettes professionnelles.
                     </p>
                 </div>
 
@@ -64,7 +64,6 @@ export function RacketRental() {
 
                         {racketRental && (
                             <div className="mt-6">
-                                <h3 className="text-lg font-medium mb-4">Choisissez votre raquette</h3>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {rackets.map((racket) => (
                                         <Card

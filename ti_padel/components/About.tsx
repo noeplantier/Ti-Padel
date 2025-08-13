@@ -35,7 +35,7 @@ export function About() {
             </h2>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
               Ancrés dans la tradition bretonne, nous partageons notre passion du Padel 
-              depuis plus de 2 ans. Notre club, située sur la ville de Guingamp, 
+              depuis plus de 2 ans. Notre club, située sur la ville de Baud,
               offre un cadre exceptionnel pour découvrir ou perfectionner cette discipline.
             </p>
             <p className="text-lg text-gray-600 mb-8 leading-relaxed">
