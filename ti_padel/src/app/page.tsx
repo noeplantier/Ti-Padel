@@ -18,8 +18,9 @@ export default function Home() {
             <About />
             <CourtsPage />
             <Booking />
-            <MenuPage />
             <RacketRental />
+            <MenuPage />
+
             <Contact />
             <Footer />
         </main>

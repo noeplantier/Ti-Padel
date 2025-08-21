@@ -1,3 +1,5 @@
+'use client';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,7 +20,7 @@ export function Contact() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Information */}
-          <div className="space-y-6">
+          <div className="space-y-6 order-3">
             <Card className="border-0 shadow-sm">
               <CardContent className="p-6">
                 <div className="flex items-start space-x-4">
@@ -52,32 +54,6 @@ export function Contact() {
             </Card>
 
 
-            <Card className="border-0 shadow-sm">
-              <CardContent className="p-6">
-                <div className="flex items-start space-x-4">
-                  <div className="p-2 bg-black/5 rounded-lg">
-                    <BadgeCheck className="h-6 w-6 text-black" />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-black mb-2">Réseaux</h3>
-                    <div className="flex space-x-4">
-                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                        <Facebook className="h-5 w-5" />
-                      </a>
-                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                        <Instagram className="h-5 w-5" />
-                      </a>
-                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                        <LinkedinIcon className="h-5 w-5" />
-                      </a>
-                      <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                        <MessageCircle className="h-5 w-5" />
-                      </a>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
 
             <Card className="border-0 shadow-sm">
               <CardContent className="p-6">
@@ -112,10 +88,38 @@ export function Contact() {
           </div>
 
           {/* Contact Form */}
-          <div className="lg:col-span-2">
+
+          <Card className="border-0 shadow-sm order-2">
+            <CardContent className="p-6">
+              <div className="flex items-start space-x-4">
+                <div className="p-2 bg-black/5 rounded-lg">
+                  <BadgeCheck className="h-6 w-6 text-black" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-black mb-2">Réseaux</h3>
+                  <div className="flex space-x-4">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <Facebook className="h-5 w-5" />
+                    </a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <LinkedinIcon className="h-5 w-5" />
+                    </a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <MessageCircle className="h-5 w-5" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <div className="lg:col-span-2 order-1">
             <Card className="border-0 shadow-sm">
               <CardHeader>
-                <CardTitle>Envoyez-nous un message</CardTitle>
+                <CardTitle>Envoyez-nous un message sur nos réseaux</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

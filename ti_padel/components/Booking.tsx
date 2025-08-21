@@ -15,6 +15,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { CalendarIcon, Clock, CreditCard, User } from 'lucide-react';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
+import { addOrder } from '@/lib/orders';
 
 export function Booking() {
   const [selectedDate, setSelectedDate] = useState<Date>();
@@ -43,8 +44,24 @@ export function Booking() {
   };
 
   const handlePayment = () => {
-    // This would integrate with Stripe
-    alert('Intégration Stripe requise - Veuillez configurer vos clés API Stripe pour activer les paiements.');
+    if (!selectedService || !selectedDate || !selectedTime || !formData.name || !formData.email) {
+      alert('Veuillez compléter le formulaire avant de continuer.');
+      return;
+    }
+    const svc = services.find(s => s.id === selectedService);
+    addOrder({
+      kind: 'booking',
+      serviceId: selectedService,
+      serviceName: svc ? svc.name : selectedService,
+      date: selectedDate.toISOString(),
+      time: selectedTime,
+      name: formData.name,
+      email: formData.email,
+      phone: formData.phone,
+      notes: formData.notes,
+      price: svc?.price,
+    });
+    alert('Votre réservation a été enregistrée. Paiement Stripe à configurer.');
   };
 
   const selectedServiceData = services.find(s => s.id === selectedService);

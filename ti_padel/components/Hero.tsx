@@ -16,7 +16,7 @@ export function Hero() {
    
 
           {/* Main Heading */}
-          <h1 className="text-6xl mt-3 md:text-8xl font-bold text-black mb-6 tracking-tight">
+          <h1 className="text-6xl mt-20 md:text-9xl font-bold text-black mb-6 tracking-tight">
             Ti Padel
           </h1>
           

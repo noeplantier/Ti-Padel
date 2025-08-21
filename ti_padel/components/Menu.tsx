@@ -1,9 +1,18 @@
 'use client';
-
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
+import {
+    GiWaterBottle,
+    GiFruitBowl,
+    GiSodaCan,
+    GiBeerBottle,
+    GiPotato,
+
+    GiSlicedBread, GiChiliPepper, GiAppleCore
+} from 'react-icons/gi';
+import { addOrder } from '@/lib/orders';
 
 interface MenuItem {
     id: number;
@@ -11,6 +20,7 @@ interface MenuItem {
     description: string;
     price: number;
     category: 'drink' | 'snack';
+    icon: JSX.Element;
 }
 
 interface CartItem extends MenuItem {
@@ -22,14 +32,14 @@ export function MenuPage() {
     const [activeCategory, setActiveCategory] = useState<'all' | 'drink' | 'snack'>('all');
 
     const menuItems: MenuItem[] = [
-        { id: 1, name: 'Eau minérale', description: 'Eau plate ou gazeuse', price: 2.5, category: 'drink' },
-        { id: 2, name: 'Jus de fruits', description: 'Jus d\'orange, de pomme ou d\'ananas', price: 3.5, category: 'drink' },
-        { id: 3, name: 'Soda', description: 'Coca, Sprite, Fanta', price: 3.0, category: 'drink' },
-        { id: 4, name: 'Bières', description: 'Bières locales artisanales', price: 4.5, category: 'drink' },
-        { id: 5, name: 'Chips', description: 'Chips nature, paprika ou fromage', price: 2.5, category: 'snack' },
-        { id: 6, name: 'Barres de céréales', description: 'Barres énergétiques aux fruits', price: 2.0, category: 'snack' },
-        { id: 7, name: 'Fruits secs', description: 'Mélanges de noix et amandes', price: 3.5, category: 'snack' },
-        { id: 8, name: 'Banana bread', description: 'Maison fait avec des bananes bio', price: 3.0, category: 'snack' },
+        { id: 1, name: 'Eau minérale', description: 'Eau plate ou gazeuse', price: 2.5, category: 'drink', icon: <GiWaterBottle className="text-blue-500" size={40} /> },
+        { id: 2, name: 'Jus de fruits', description: 'Jus d\'orange, de pomme ou d\'ananas', price: 3.5, category: 'drink', icon: <GiFruitBowl className="text-orange-500" size={40} /> },
+        { id: 3, name: 'Soda', description: 'Coca, Sprite, Fanta', price: 3.0, category: 'drink', icon: <GiSodaCan className="text-red-500" size={40} /> },
+        { id: 4, name: 'Bières', description: 'Bières locales artisanales', price: 4.5, category: 'drink', icon: <GiBeerBottle className="text-amber-600" size={40} /> },
+        { id: 5, name: 'Chips', description: 'Chips nature ou fromage', price: 2.5, category: 'snack', icon: <GiPotato className="text-yellow-500" size={40} /> },
+        { id: 6, name: 'Spicy Food', description: 'Nourriture épicée', price: 2.0, category: 'snack', icon: <GiChiliPepper className="text-red-500" size={40} />},
+        { id: 7, name: 'Fruits secs', description: 'Mélanges de noix et amandes', price: 3.5, category: 'snack', icon: <GiAppleCore className="text-green-700" size={40} />},
+        { id: 8, name: 'Banana bread', description: 'Maison fait avec des bananes bio', price: 3.0, category: 'snack', icon: <GiSlicedBread className="text-yellow-700" size={40} /> },
     ];
 
     const filteredItems = activeCategory === 'all'
@@ -75,7 +85,7 @@ export function MenuPage() {
     };
 
     return (
-        <section id="carte" className="py-24  bg-gray-50">
+        <section id="carte" className="py-24 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
                     <h1 className="text-4xl font-bold text-gray-900 mb-4">Carte des Boissons & Snacks</h1>
@@ -83,7 +93,6 @@ export function MenuPage() {
                         Découvrez notre sélection de boissons et snacks pour accompagner votre partie de padel
                     </p>
                 </div>
-
                 <div className="flex flex-wrap justify-center gap-4 mb-10">
                     <Button
                         onClick={() => setActiveCategory('all')}
@@ -104,13 +113,19 @@ export function MenuPage() {
                         Snacks
                     </Button>
                 </div>
-
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-16">
                     {filteredItems.map((item) => (
-                        <Card key={item.id} className="flex flex-col">
+                        <Card key={item.id} className="flex flex-col relative">
                             <CardHeader>
-                                <CardTitle>{item.name}</CardTitle>
-                                <CardDescription>{item.description}</CardDescription>
+                                <div className="flex justify-between items-start">
+                                    <div>
+                                        <CardTitle>{item.name}</CardTitle>
+                                        <CardDescription>{item.description}</CardDescription>
+                                    </div>
+                                    <div className="absolute top-4 right-4">
+                                        {item.icon}
+                                    </div>
+                                </div>
                             </CardHeader>
                             <CardContent className="flex-grow">
                                 <p className="text-2xl font-bold text-gray-900">{item.price.toFixed(2)}€</p>
@@ -126,16 +141,20 @@ export function MenuPage() {
                         </Card>
                     ))}
                 </div>
-
                 {cart.length > 0 && (
-                    <div className="bg-gray-50 rounded-lg p-6">
+                    <div className="bg-white rounded-lg p-6 shadow-md">
                         <h2 className="text-2xl font-bold text-gray-900 mb-4">Votre commande</h2>
                         <div className="space-y-4">
                             {cart.map((item) => (
                                 <div key={item.id} className="flex items-center justify-between py-2">
-                                    <div>
-                                        <h3 className="font-medium">{item.name}</h3>
-                                        <p className="text-gray-600">{item.price.toFixed(2)}€ x {item.quantity}</p>
+                                    <div className="flex items-center gap-3">
+                                        <div className="text-gray-500">
+                                            {item.icon}
+                                        </div>
+                                        <div>
+                                            <h3 className="font-medium">{item.name}</h3>
+                                            <p className="text-gray-600">{item.price.toFixed(2)}€ x {item.quantity}</p>
+                                        </div>
                                     </div>
                                     <div className="flex items-center space-x-2">
                                         <Button
@@ -162,7 +181,16 @@ export function MenuPage() {
                             <p className="text-xl font-bold">Total: {getTotalPrice().toFixed(2)}€</p>
                             <div className="space-x-2">
                                 <Button variant="outline" onClick={clearCart}>Vider le panier</Button>
-                                <Button className="bg-black text-white hover:bg-gray-800">Commander</Button>
+                                <Button className="bg-black text-white hover:bg-gray-800" onClick={() => {
+                                    if (cart.length === 0) return;
+                                    addOrder({
+                                        kind: 'menu',
+                                        items: cart.map(c => ({ id: c.id, name: c.name, price: c.price, quantity: c.quantity })),
+                                        total: getTotalPrice(),
+                                    });
+                                    clearCart();
+                                    alert('Votre commande a été ajoutée. Merci !');
+                                }}>Commander</Button>
                             </div>
                         </div>
                     </div>

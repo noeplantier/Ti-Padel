@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
+import { addOrder } from '@/lib/orders';
 
 interface Racket {
     id: number;
@@ -107,6 +108,18 @@ export function RacketRental() {
                             <Button
                                 className={`w-full ${racketRental ? 'bg-black hover:bg-gray-800' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
                                 disabled={!racketRental}
+                                onClick={() => {
+                                    if (!racketRental || !selectedRacket) return;
+                                    const r = rackets.find(rr => rr.id === selectedRacket);
+                                    if (!r) return;
+                                    addOrder({
+                                        kind: 'racket',
+                                        racketId: r.id,
+                                        label: `${r.brand} ${r.model}`.trim(),
+                                        price: r.price,
+                                    });
+                                    alert('Location ajoutée à votre réservation');
+                                }}
                             >
                                 {racketRental
                                     ? `Ajouter la location (${selectedRacket ? rackets.find(r => r.id === selectedRacket)?.price.toFixed(2) : '0.00'}€)`
