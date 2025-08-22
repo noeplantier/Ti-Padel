@@ -54,10 +54,7 @@ export function Services() {
               </CardHeader>
               
               <CardContent className="pt-0">
-                <div className="text-center mb-6">
-                  <div className="text-3xl font-bold text-black mb-1">{service.price}</div>
-                  <div className="text-sm text-gray-500">{service.duration}</div>
-                </div>
+
                 
                 <div className="space-y-2">
                   {service.features.map((feature, featureIndex) => (

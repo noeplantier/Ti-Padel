@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { addOrder } from '@/lib/orders';
+import {addOrder, CourtOrder} from '@/lib/orders';
 
 interface Court {
     id: number;
@@ -29,12 +29,13 @@ export function CourtsPage() {
         const target = courts.find(c => c.id === id);
         if (target && !target.occupied) {
             // Save as an order when reserving a free court
-            addOrder({
+            const courtOrder: Omit<CourtOrder, 'id' | 'createdAt'> = {
                 kind: 'court',
                 courtId: target.id,
                 courtName: target.name,
                 price: target.hourlyRate,
-            });
+            };
+            addOrder(courtOrder);
         }
         setCourts(courts.map(court =>
             court.id === id ? { ...court, occupied: !court.occupied } : court

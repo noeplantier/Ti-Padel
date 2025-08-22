@@ -12,7 +12,7 @@ import {
 
     GiSlicedBread, GiChiliPepper, GiAppleCore
 } from 'react-icons/gi';
-import { addOrder } from '@/lib/orders';
+import {addOrder, MenuOrder} from '@/lib/orders';
 
 interface MenuItem {
     id: number;
@@ -183,11 +183,12 @@ export function MenuPage() {
                                 <Button variant="outline" onClick={clearCart}>Vider le panier</Button>
                                 <Button className="bg-black text-white hover:bg-gray-800" onClick={() => {
                                     if (cart.length === 0) return;
-                                    addOrder({
+                                    const menuOrder: Omit<MenuOrder, 'id' | 'createdAt'> = {
                                         kind: 'menu',
                                         items: cart.map(c => ({ id: c.id, name: c.name, price: c.price, quantity: c.quantity })),
                                         total: getTotalPrice(),
-                                    });
+                                    };
+                                    addOrder(menuOrder);
                                     clearCart();
                                     alert('Votre commande a été ajoutée. Merci !');
                                 }}>Commander</Button>

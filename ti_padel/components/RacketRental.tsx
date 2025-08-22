@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Switch } from '@/components/ui/switch';
 import { Label } from '@/components/ui/label';
-import { addOrder } from '@/lib/orders';
+import {addOrder, RacketOrder} from '@/lib/orders';
 
 interface Racket {
     id: number;
@@ -103,7 +103,6 @@ export function RacketRental() {
                                 </div>
                             </div>
                         )}
-
                         <div className="mt-8">
                             <Button
                                 className={`w-full ${racketRental ? 'bg-black hover:bg-gray-800' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
@@ -112,12 +111,13 @@ export function RacketRental() {
                                     if (!racketRental || !selectedRacket) return;
                                     const r = rackets.find(rr => rr.id === selectedRacket);
                                     if (!r) return;
-                                    addOrder({
+                                    const racketOrder: Omit<RacketOrder, 'id' | 'createdAt'> = {
                                         kind: 'racket',
                                         racketId: r.id,
                                         label: `${r.brand} ${r.model}`.trim(),
                                         price: r.price,
-                                    });
+                                    };
+                                    addOrder(racketOrder);
                                     alert('Location ajoutée à votre réservation');
                                 }}
                             >
