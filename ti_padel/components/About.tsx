@@ -1,5 +1,6 @@
 import { Card, CardContent } from '@/components/ui/card';
-import { Award, Heart, Shield, Waves } from 'lucide-react';
+import { Anchor, Award, Heart, Shield, Waves } from 'lucide-react';
+import { GiTennisRacket } from 'react-icons/gi';
 
 export function About() {
   const values = [
@@ -19,7 +20,7 @@ export function About() {
       description: 'Équipements professionnels et protocoles stricts'
     },
     {
-      icon: Waves,
+      icon: Anchor,
       title: 'Tradition',
       description: 'Héritage breton respecté'
     }

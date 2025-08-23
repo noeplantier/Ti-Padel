@@ -18,7 +18,38 @@ export function Contact() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+     
+
+          {/* Contact Form */}
+{/* 
+          <Card className="border-0 shadow-sm order-2">
+            <CardContent className="p-6">
+              <div className="flex items-start space-x-4">
+                <div className="p-2 bg-black/5 rounded-lg">
+                  <BadgeCheck className="h-6 w-6 text-black" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-black mb-2">Réseaux</h3>
+                  <div className="flex space-x-4">
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <Facebook className="h-5 w-5" />
+                    </a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <Instagram className="h-5 w-5" />
+                    </a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <LinkedinIcon className="h-5 w-5" />
+                    </a>
+                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                      <MessageCircle className="h-5 w-5" />
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+ */}
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Information */}
           <div className="space-y-6 order-3">
             <Card className="border-0 shadow-sm">
@@ -87,35 +118,6 @@ export function Contact() {
             </Card>
           </div>
 
-          {/* Contact Form */}
-
-          <Card className="border-0 shadow-sm order-2">
-            <CardContent className="p-6">
-              <div className="flex items-start space-x-4">
-                <div className="p-2 bg-black/5 rounded-lg">
-                  <BadgeCheck className="h-6 w-6 text-black" />
-                </div>
-                <div>
-                  <h3 className="font-semibold text-black mb-2">Réseaux</h3>
-                  <div className="flex space-x-4">
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                      <Facebook className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                      <Instagram className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                      <LinkedinIcon className="h-5 w-5" />
-                    </a>
-                    <a href="#" className="text-gray-400 hover:text-white transition-colors">
-                      <MessageCircle className="h-5 w-5" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
           <div className="lg:col-span-2 order-1">
             <Card className="border-0 shadow-sm">
               <CardHeader>
@@ -143,7 +145,7 @@ export function Contact() {
                   <Textarea
                     id="contact-message"
                     placeholder="Votre message..."
-                    rows={6}
+                    rows={9}
                   />
                 </div>
 

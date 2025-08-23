@@ -13,20 +13,20 @@ export function Services() {
     {
       icon: Beef,
       title: 'Petite restauration',
-      description: 'Coaching personnalisé pour progresser rapidement avec un instructeur dédié.',
-      features: ['Coaching 1:1', 'Programme sur mesure', 'Suivi personnalisé']
+      description: 'Restauration rapide et saine pour reprendre des forces après le jeu.',
+      features: ['Nourriture de qualité', 'Boissons fraîches', 'Ambiance conviviale']
     },
     {
       icon: Handshake,
       title: 'Séminaires d\'entreprise',
-      description: 'Venez jouer dans nos clubs Ti Padel pour des sessions amicales et compétitives.',
+      description: 'Ateliers de team building pour renforcer la cohésion d\'équipe.',
       features: ['Coach expérimenté', 'Conseils sportifs', 'Collation incluse']
     },
     {
       icon: Cake,
       title: 'Évenements',
-      description: 'Perfectionnement technique sur plusieurs jours pour tous niveaux.',
-      features: ['Formation complète', 'Certificat', 'Matériel professionnel']
+      description: 'Organisation d\'événements privés ou d\'anniversaires sur mesure.',
+      features: ['Activités variées', 'Tarifs de groupes', 'Décoration personnalisée']
     }
   ];
 
