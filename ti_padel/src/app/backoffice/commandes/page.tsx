@@ -1,9 +1,11 @@
-"use client";
+'use client';
 
-import { useEffect, useState } from 'react';
-import { getOrders, removeOrder, clearOrders, Order } from '@/lib/orders';
+import { useState, useEffect } from 'react';
+import { getOrders, removeOrder, clearOrders, type Order } from '@/lib/orders';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
 
 export default function BackOfficeCommandesPage() {
   const [orders, setOrders] = useState<Order[]>([]);
@@ -34,6 +36,16 @@ export default function BackOfficeCommandesPage() {
   return (
     <main className="min-h-screen bg-white py-24">
       <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        {/* Bouton Retour */}
+        <div className="mb-6">
+          <Link href="/">
+            <Button variant="outline" className="flex items-center space-x-2">
+              <ArrowLeft className="h-4 w-4" />
+              <span>Retour à l'accueil</span>
+            </Button>
+          </Link>
+        </div>
+
         <div className="flex items-center justify-between mb-6">
           <h1 className="text-3xl font-bold">Back Office - Commandes</h1>
           {orders.length > 0 && (
@@ -41,6 +53,7 @@ export default function BackOfficeCommandesPage() {
           )}
         </div>
 
+        {/* Reste du code existant */}
         <Card className="border-0 shadow-sm">
           <CardHeader>
             <CardTitle>Liste des commandes ({orders.length})</CardTitle>
