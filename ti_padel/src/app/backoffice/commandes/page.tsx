@@ -34,8 +34,8 @@ export default function BackOfficeCommandesPage() {
   };
 
   return (
-    <main className="min-h-screen bg-white py-24">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+    <main className="min-h-screen bg-white py-4">
+      <div className="max-w-5xl mx-auto sm:px-6 lg:px-8">
         {/* Bouton Retour */}
         <div className="mb-6">
           <Link href="/">

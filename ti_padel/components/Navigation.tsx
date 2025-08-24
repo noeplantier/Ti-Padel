@@ -81,10 +81,10 @@ export function Navigation() {
                 Carte
               </button>
               <button
-                  onClick={() => scrollToSection('location')}
+                  onClick={() => scrollToSection('contact')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
-                Location
+                Contact
               </button>
             </div>
 
