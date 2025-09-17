@@ -28,7 +28,7 @@ export function Navigation() {
       <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
       }`}>
-        <div className="max-w-7xl mx-auto px-0"> {/* px-0 pour supprimer les marges latérales */}
+        <div className="max-w-7xl mx-auto px-0"> 
           <div className="flex items-center justify-between h-16 w-full">
             {/* Logo à l'extrême gauche, sans marge */}
             <div className="ml-0">
@@ -91,7 +91,7 @@ export function Navigation() {
             {/* Panier à l'extrême droite, sans marge */}
             <div className="hidden md:block mr-0">
               <Link href="/backoffice/commandes" className="text-black">
-                <ShoppingCart className="h-8 w-8" />
+                <ShoppingCart className="h-6 w-6" />
               </Link>
             </div>
 

@@ -37,7 +37,7 @@ export function Hero() {
           <div className="mt-10 md:mt-10">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto mb-6">
               <div className="group bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-black/5 transition-all duration-300 hover:shadow-2xl hover:scale-[1.03]">
-                <div className="h-8 w-8 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
+                <div className="h-12 w-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
                   <MapPin className="h-6 w-6" />
                 </div>
                 <h4 className="text-lg font-semibold text-black mb-1">Terrains Premium</h4>
