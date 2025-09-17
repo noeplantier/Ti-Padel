@@ -34,9 +34,9 @@ export function Services() {
     <section id="services" className="py-24 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-black mb-4">Nos Services</h2>
+          <h2 className="text-6xl font-bold text-black mb-4">Nos Services</h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Des cours adaptés à tous les niveaux pour découvrir ou perfectionner votre technique de Padel
+            Des services optimisés pour vous offrir la meilleure expérience de Padel.
           </p>
         </div>
 
