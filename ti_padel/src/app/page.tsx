@@ -20,7 +20,6 @@ export default function Home() {
             <Booking />
             <RacketRental />
             <MenuPage />
-
             <Contact />
             <Footer />
         </main>
