@@ -70,8 +70,8 @@ export function Booking() {
     <section id="reservation" className="py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-4xl font-bold text-black mb-4">Réservation</h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <h2 className="text-6xl font-bold text-black mb-4">Réservation</h2>
+        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
             Choisissez votre créneau et réservez votre session de Padel en quelques clics
           </p>
         </div>

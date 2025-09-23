@@ -54,17 +54,7 @@ export function CourtsPage() {
             features: ['Climatisation', 'Vestiaires', 'Éclairage LED'],
             nextAvailable: '15:00'
         },
-        { 
-            id: 4, 
-            name: 'Terrain D', 
-            type: 'intérieur', 
-            surface: 'synthétique', 
-            occupied: false, 
-            hourlyRate: 12.5,
-            capacity: 4,
-            features: ['Climatisation', 'Vestiaires', 'Éclairage LED', 'Gradin'],
-            nextAvailable: '13:30'
-        },
+  
     ]);
 
     const toggleCourtStatus = (id: number) => {
@@ -103,8 +93,8 @@ export function CourtsPage() {
         <section id="terrains" className="py-24 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Terrains de Padel</h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                <h2 className="text-6xl font-bold text-black mb-4">Nos Terrains</h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Découvrez nos terrains de padel et réservez celui qui vous convient. <br />Tarif: 12,50€/90min
                     </p>
                 </div>
@@ -114,7 +104,8 @@ export function CourtsPage() {
                     <Button 
                         onClick={liberateAllCourts}
                         variant="outline"
-                        className="bg-white hover:bg-gray-50"
+                        className="bg-white hover:bg-gray-50 border-gray-500 text-gray-700 hover:text-gray-900 font-semibold" 
+                        size={'lg'}
                     >
                         Libérer tous les terrains
                     </Button>

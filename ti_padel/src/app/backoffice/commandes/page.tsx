@@ -122,10 +122,10 @@ export default function BackOfficeCommandesPage() {
   if (!mounted) return <main className="min-h-screen bg-gray-50 py-8" suppressHydrationWarning />;
 
   return (
-    <main className="min-h-screen bg-gray-50 py-8" suppressHydrationWarning>
+    <main className="min-h-screen py-8" suppressHydrationWarning>
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* En-tête */}
-        <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-start sm:justify-between">
+        <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-start sm:justify-between mt-10">
           <Link href="/" className="sm:pt-1">
             <Button variant="outline" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />

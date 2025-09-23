@@ -52,7 +52,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-4">Contact</h3>
+          <h2 className="text-6xl font-bold text-black mb-4">Contact</h2>
             <div className="space-y-2 text-gray-400 mb-6">
               <p>Club Ti Padel</p>
               <p>56150 Baud</p>

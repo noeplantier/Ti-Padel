@@ -88,8 +88,8 @@ export function MenuPage() {
         <section id="carte" className="py-24 bg-gray-50">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
-                    <h1 className="text-4xl font-bold text-gray-900 mb-4">Carte des Boissons & Snacks</h1>
-                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                <h2 className="text-6xl font-bold text-black mb-4">Boissons & Snacks</h2>
+                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Découvrez notre sélection de boissons et snacks pour accompagner votre partie de padel
                     </p>
                 </div>

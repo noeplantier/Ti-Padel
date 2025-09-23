@@ -19,7 +19,7 @@ export default function Home() {
             <CourtsPage />
             <Booking />
             <RacketRental />
-            <MenuPage />
+            {/* <MenuPage /> */}
             <Contact />
             <Footer />
         </main>
