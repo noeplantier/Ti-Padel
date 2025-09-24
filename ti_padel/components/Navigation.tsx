@@ -73,13 +73,14 @@ export function Navigation() {
               >
                 Réserver
               </button>
-
+{/* 
               <button
                   onClick={() => scrollToSection('carte')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Carte
-              </button>
+              </button> */}
+              
               <button
                   onClick={() => scrollToSection('contact')}
                   className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
