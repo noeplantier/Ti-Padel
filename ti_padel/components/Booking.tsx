@@ -1,7 +1,3 @@
-
-
-
-
 'use client';
 
 import { useState } from 'react';
@@ -18,9 +14,9 @@ import { fr } from 'date-fns/locale';
 import {addOrder, BookingOrder} from '@/lib/orders';
 
 export function Booking() {
-  const [selectedDate, setSelectedDate] = useState<Date>();
-  const [selectedService, setSelectedService] = useState('');
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedTime, setSelectedTime] = useState('');
+  const [selectedService, setSelectedService] = useState('');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -113,7 +109,7 @@ export function Booking() {
                   <Calendar
                     mode="single"
                     selected={selectedDate}
-                    onSelect={setSelectedDate}
+                    onSelect={(date) => date && setSelectedDate(date)}
                     disabled={(date) => date < new Date() || date.getDay() === 0}
                     className="rounded-md border"
                     locale={fr}

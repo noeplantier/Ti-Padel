@@ -20,7 +20,7 @@ interface Court {
 }
 
 export function CourtsPage() {
-    const [courts, setCourts] = useState<Court[]>([
+const [courts, setCourts] = useState<Court[]>([
         { 
             id: 1, 
             name: 'Terrain A', 
@@ -54,8 +54,7 @@ export function CourtsPage() {
             features: ['Climatisation', 'Vestiaires', 'Éclairage LED'],
             nextAvailable: '15:00'
         },
-  
-    ]);
+  ]);
 
     const toggleCourtStatus = (id: number) => {
         const target = courts.find(c => c.id === id);
