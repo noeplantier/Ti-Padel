@@ -56,20 +56,20 @@ export type Order = CourtOrder | MenuOrder | RacketOrder | BookingOrder;
 const STORAGE_KEY = 'ti-padel-orders';
 
 function isBrowser() {
-  return typeof window !== 'undefined' && typeof localStorage !== 'undefined';
+  return typeof window !== 'undefined';
 }
 
-export function getOrders(): Order[] {
+export function getOrders() {
   if (!isBrowser()) return [];
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return [];
-    const parsed = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    return parsed as Order[];
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return [];
+      const parsed = JSON.parse(raw);
+      if (!Array.isArray(parsed)) return [];
+      return parsed;
   } catch (e) {
-    console.warn('Failed to read orders from localStorage', e);
-    return [];
+      console.error('Error reading orders from localStorage:', e);
+      return [];
   }
 }
 
