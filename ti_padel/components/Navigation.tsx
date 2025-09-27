@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
-import '../src/app/globals.css';
+import '../app/globals.css';
 
 export function Navigation() {
   const [isScrolled, setIsScrolled] = useState(false);
