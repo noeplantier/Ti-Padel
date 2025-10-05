@@ -143,18 +143,6 @@ export function Navigation() {
                     Réserver
                   </button>
 
-                  <button
-                      onClick={() => scrollToSection('carte')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Carte
-                  </button>
-                  <button
-                      onClick={() => scrollToSection('location')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Location
-                  </button>
                   <Link href="/backoffice/commandes" className="text-gray-400 hover:text-black transition-colors">
                     <ShoppingCart className="h-5 w-5" />
                   </Link>
