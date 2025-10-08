@@ -19,7 +19,7 @@ export function Hero() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           {/* Main Heading */}
-          <h1 className="text-6xl mt-8 md:text-9xl font-bold text-black mb-6 tracking-tight">
+          <h1 className="text-6xl mt-6 md:text-9xl font-bold text-black mb-6 tracking-tight">
             Ti Padel
           </h1>
           
@@ -35,7 +35,7 @@ export function Hero() {
 
           {/* Tilted Cards */}
           <div className="mt-10 md:mt-10">
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto mb-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto mb-12">
               <div className="group bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-black/5 transition-all duration-300 hover:shadow-2xl hover:scale-[1.03]">
                 <div className="h-12 w-12 rounded-xl bg-black/5 text-black flex items-center justify-center mb-4 transition-transform duration-300 group-hover:scale-110">
                   <MapPin className="h-6 w-6" />
@@ -73,7 +73,7 @@ export function Hero() {
            
 
           {/* CTA Buttons */}
-          <div className="mt-10 md:mt-10 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+          <div className="mt-12 md:mt-10 flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <Button 
               onClick={scrollToReservation}
               size="lg" 
