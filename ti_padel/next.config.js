@@ -1,18 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
-  images: {
-    unoptimized: true
-  },
   eslint: {
-    ignoreDuringBuilds: true,
+    ignoreDuringBuilds: true, // Ignore ESLint pendant le build
   },
   typescript: {
     ignoreBuildErrors: true,
   },
-  // Correction pour le workspace root
+  images: {
+    unoptimized: true
+  },
   outputFileTracingRoot: process.cwd(),
-  // Suppression de l'option invalide suppressHydrationWarning
   experimental: {
     esmExternals: false
   }
