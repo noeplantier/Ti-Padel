@@ -24,10 +24,24 @@
     --input: 0 0% 89.8%;
     --ring: 0 0% 3.9%;
     --radius: 0.5rem;
+
+        /* Tokens UI communs */
+        --hero-bg-top: #f8fafc;
+        --hero-bg-bottom: #ffffff;
+        --surface: 255 255 255;            /* RGB sans alpha */
+        --surface-alpha: 0.7;              /* opacité cartes */
+        --surface-border: 0 0 0 / 0.05;    /* border rgba */
+        --pattern: 0 0 0 / 0.03;           /* motif léger */
+    
+        /* Accent par défaut (fallback) */
+        --accent: #0ea5e9;
   }
 }
 
 @layer base {
+  .theme-conditions { --accent: #3b82f6; }     /* bleu */
+  .theme-confidential { --accent: #10b981; }   /* vert */
+  .theme-legalmentions { --accent: #a855f7; }  /* violet */
   * {
     @apply border-border;
   }
@@ -111,6 +125,46 @@
 @media (max-width: 767.98px) {
   .shaking-image {
     height: 30px;
+  }
+}
+
+@layer components {
+  .hero-gradient {
+    background-image:
+      radial-gradient(1200px 800px at 50% -10%, color-mix(in srgb, var(--accent) 18%, transparent), transparent),
+      linear-gradient(to bottom, var(--hero-bg-top), var(--hero-bg-bottom));
+  }
+
+  .celtic-pattern {
+    position: relative;
+    overflow: hidden;
+  }
+  .celtic-pattern::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(45deg, rgba(var(--pattern)) 0 2px, transparent 2px 18px),
+      repeating-linear-gradient(-45deg, rgba(var(--pattern)) 0 2px, transparent 2px 18px);
+    pointer-events: none;
+    mix-blend-mode: multiply;
+  }
+
+  .wave-decoration {
+    height: 14px;
+    background: linear-gradient(90deg,
+      color-mix(in srgb, var(--accent) 65%, white) 0%,
+      color-mix(in srgb, var(--accent) 45%, white) 50%,
+      color-mix(in srgb, var(--accent) 65%, white) 100%);
+  
+  }
+
+  /* Surface util si besoin (cartes custom) */
+  .card-surface {
+    background-color: rgba(var(--surface), var(--surface-alpha));
+    backdrop-filter: blur(6px);
+    border: 1px solid rgba(var(--surface-border));
+    border-radius: 1rem;
   }
 }
 
