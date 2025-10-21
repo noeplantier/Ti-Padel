@@ -35,9 +35,9 @@ export function Navigation() {
               <Image
                   src="/images/tipadel-logo.png"
                   alt="Ti Padel Logo"
-                  width={100}
-                  height={100}
-                  className="shaking-image h-12 w-12"
+                  width={200}
+                  height={200}
+                  className="shaking-image h-22 w-22"
               />
             </div>
 

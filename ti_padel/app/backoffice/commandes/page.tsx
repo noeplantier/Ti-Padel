@@ -8,7 +8,6 @@ import { ArrowLeft, CreditCard, Trash2, AlertCircle, CheckCircle, Clock, Shoppin
 import { getOrders, removeOrder, clearOrders, type Order } from '@/lib/orders';
 import { Skeleton } from '@/components/ui/skeleton';
 import { Badge } from '@/components/ui/badge';
-import { Navigation } from '@/components/Navigation';
 
 type UIOrder = Order & { __total?: number };
 
@@ -124,10 +123,12 @@ export default function BackOfficeCommandesPage() {
   if (!mounted) return <main className="min-h-screen bg-gray-50 py-8" suppressHydrationWarning />;
 
   return (
+
+    
     <main className="min-h-screen bg-gray-50 py-8">
+
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
         {/* Header */}
-
 
                 {/* Body */}
 

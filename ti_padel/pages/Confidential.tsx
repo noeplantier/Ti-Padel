@@ -1,6 +1,6 @@
 import { LockClosedIcon } from '@heroicons/react/24/outline';
 
-export default function Confidential () {
+export default function ConfidentialPage() {
   return (
     <div className="max-w-3xl mx-auto py-12 px-4">
       <div className="bg-white rounded-xl shadow-md p-8 flex flex-col items-center">
