@@ -53,8 +53,40 @@ export function Footer() {
 
           {/* Contact */}
           <div>
+          <h2 className="text-xl font-bold text-white mb-4">Contact</h2>
+            <div className="space-y-2 text-gray-400 mb-6">
+              <p>Club Ti Padel</p>
+              <p>56150 Baud</p>
+              <p>+33 2 98 56 78 90</p>
+              <p>tipadelbaud@gmail.com
+              </p>
+            </div>
+
+            <div className="flex space-x-4">
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Facebook className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <Instagram className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <LinkedinIcon className="h-5 w-5" />
+              </a>
+              <a href="#" className="text-gray-400 hover:text-white transition-colors">
+                <MessageCircle className="h-5 w-5" />
+              </a>
+            </div>
             {/* ...existing code... */}
           </div>
+        </div>
+
+        <div className="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+          <p className="text-gray-400 text-sm">
+            © 2024 Ti Padel. Tous droits réservés.
+          </p>
+          <p className="text-gray-400 text-sm mt-4 md:mt-0">
+            Fait avec  🤍 en Bretagne
+          </p>
         </div>
       </div>
     </footer>
