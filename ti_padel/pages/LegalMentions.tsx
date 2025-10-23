@@ -1,9 +1,12 @@
 import { DocumentTextIcon, BuildingOffice2Icon, ServerIcon, EnvelopeIcon, AcademicCapIcon } from '@heroicons/react/24/outline';
 import styles from '@/styles/legal-pages.module.css';
+import { Navigation } from '@/components/Navigation';
+
 
 export default function LegalMentionsPage() {
   return (
     <section suppressHydrationWarning className={`relative min-h-screen flex items-center justify-center hero-gradient celtic-pattern theme-legalmentions ${styles.page}`}>
+     <Navigation />
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 ${styles.inner}`}>
         <div className="text-center">
           <h1 className={`text-6xl md:text-9xl font-bold text-black mb-6 tracking-tight ${styles.title}`}>
