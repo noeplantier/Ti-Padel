@@ -54,7 +54,7 @@ export function About() {
 
           <div className="grid grid-cols-2 gap-6">
             {values.map((value, index) => (
-              <Card key={index} className="border-0 shadow-sm hover:shadow-md transition-shadow duration-300">
+              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <CardContent className="p-6 text-center">
                   <div className="mx-auto mb-4 p-3 bg-black/5 rounded-full w-fit">
                     <value.icon className="h-8 w-8 text-black" />

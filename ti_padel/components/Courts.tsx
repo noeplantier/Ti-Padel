@@ -94,7 +94,7 @@ const [courts, setCourts] = useState<Court[]>([
                 <div className="text-center mb-12">
                 <h2 className="text-6xl font-bold text-black mb-4">Nos Terrains</h2>
                 <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                        Découvrez nos terrains de padel et réservez celui qui vous convient. <br />Tarif: 12,50€/90min
+                        Découvrez nos terrains de padel et réservez celui qui vous convient. 
                     </p>
                 </div>
 

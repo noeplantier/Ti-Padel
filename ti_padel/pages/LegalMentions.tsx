@@ -18,7 +18,7 @@ export default function LegalMentionsPage() {
 
           <div className="mt-10 md:mt-10">
             <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto mb-12 ${styles.grid}`}>
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <BuildingOffice2Icon className="h-6 w-6" />
                 </div>
@@ -26,7 +26,7 @@ export default function LegalMentionsPage() {
                 <p className="text-sm text-gray-600">Raison sociale, adresse et responsable de la publication.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <ServerIcon className="h-6 w-6" />
                 </div>
@@ -34,7 +34,7 @@ export default function LegalMentionsPage() {
                 <p className="text-sm text-gray-600">Nom de l’hébergeur, adresse et coordonnées de contact.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <EnvelopeIcon className="h-6 w-6" />
                 </div>
@@ -42,7 +42,7 @@ export default function LegalMentionsPage() {
                 <p className="text-sm text-gray-600">Adresse email dédiée aux demandes officielles et générales.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <AcademicCapIcon className="h-6 w-6" />
                 </div>

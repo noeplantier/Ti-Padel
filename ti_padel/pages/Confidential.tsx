@@ -6,8 +6,9 @@ import { Navigation } from '@/components/Navigation';
 export default function ConfidentialPage() {
   return (
     <section suppressHydrationWarning className={`relative min-h-screen flex items-center justify-center hero-gradient celtic-pattern theme-confidential ${styles.page}`}>
-            <Navigation />
       
+      <Navigation />
+    
       <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 ${styles.inner}`}>
         <div className="text-center">
           <h1 className={`text-6xl md:text-9xl font-bold text-black mb-6 tracking-tight ${styles.title}`}>
@@ -19,7 +20,7 @@ export default function ConfidentialPage() {
 
           <div className="mt-10 md:mt-10">
             <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto mb-12 ${styles.grid}`}>
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <EyeIcon className="h-6 w-6" />
                 </div>
@@ -27,7 +28,7 @@ export default function ConfidentialPage() {
                 <p className="text-sm text-gray-600">Informations de compte, usage du site et données techniques minimales.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <ArrowPathRoundedSquareIcon className="h-6 w-6" />
                 </div>
@@ -35,7 +36,7 @@ export default function ConfidentialPage() {
                 <p className="text-sm text-gray-600">Prestation des services, sécurité, amélioration et communication.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <LockClosedIcon className="h-6 w-6" />
                 </div>
@@ -43,7 +44,7 @@ export default function ConfidentialPage() {
                 <p className="text-sm text-gray-600">Jamais vendu. Partage limité à des partenaires techniques conformes.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <UserCircleIcon className="h-6 w-6" />
                 </div>

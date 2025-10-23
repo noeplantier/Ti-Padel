@@ -1,17 +1,15 @@
 'use client';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { ArrowLeft, CreditCard, Trash2, AlertCircle, CheckCircle, Clock, ShoppingCart, Euro, FileText } from 'lucide-react';
+import { Navigation } from '@/components/Navigation';
 import { getOrders, removeOrder, clearOrders, type Order } from '@/lib/orders';
-import { Skeleton } from '@/components/ui/skeleton';
-import { Badge } from '@/components/ui/badge';
 
 type UIOrder = Order & { __total?: number };
 
-const STRIPE_PK = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_FAKE_TIPADEL_1234567890';
+const STRIPE_PK =
+  process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY || 'pk_test_FAKE_TIPADEL_1234567890';
 const isFakeStripe = /FAKE_TIPADEL/i.test(STRIPE_PK) || !STRIPE_PK;
 const stripePromise: Promise<Stripe | null> = isFakeStripe ? Promise.resolve(null) : loadStripe(STRIPE_PK);
 
@@ -39,6 +37,7 @@ export default function BackOfficeCommandesPage() {
   }, [mounted]);
 
   const canPay = !isFakeStripe;
+
   const stats = useMemo(() => {
     const count = orders.length;
     const total = orders.reduce((acc, o) => acc + Number(o.__total || 0), 0);
@@ -63,209 +62,225 @@ export default function BackOfficeCommandesPage() {
     }
   }, []);
 
-  const handlePay = useCallback(async (o: UIOrder) => {
-    setError(null);
-    if (!canPay) {
-      setError('Paiement indisponible: configuration Stripe factice ou absente.');
-      return;
-    }
-    const stripe = await stripePromise;
-    if (!stripe) {
-      setError('Échec d’initialisation de Stripe.');
-      return;
-    }
-    try {
-      setPayingId(o.id);
-      const amount = Math.round(Number(o.__total || 0) * 100);
-      if (!Number.isFinite(amount) || amount <= 0) throw new Error('Montant invalide ou à 0.');
-      const payload = {
-        mode: 'payment',
-        currency: 'eur',
-        metadata: { orderId: o.id, kind: o.kind },
-        line_items: [
-          {
-            quantity: 1,
-            price_data: {
-              currency: 'eur',
-              unit_amount: amount,
-              product_data: {
-                name: getOrderLabel(o),
-                description: getOrderDescription(o),
+  const handlePay = useCallback(
+    async (o: UIOrder) => {
+      setError(null);
+      if (!canPay) {
+        setError('Paiement indisponible: configuration Stripe factice ou absente.');
+        return;
+      }
+      const stripe = await stripePromise;
+      if (!stripe) {
+        setError('Échec d’initialisation de Stripe.');
+        return;
+      }
+      try {
+        setPayingId(o.id);
+        const amount = Math.round(Number(o.__total || 0) * 100);
+        if (!Number.isFinite(amount) || amount <= 0) throw new Error('Montant invalide ou à 0.');
+        const payload = {
+          mode: 'payment',
+          currency: 'eur',
+          metadata: { orderId: o.id, kind: o.kind },
+          line_items: [
+            {
+              quantity: 1,
+              price_data: {
+                currency: 'eur',
+                unit_amount: amount,
+                product_data: {
+                  name: getOrderLabel(o),
+                  description: getOrderDescription(o),
+                },
               },
             },
-          },
-        ],
-        success_url: `${window.location.origin}/success?orderId=${encodeURIComponent(o.id)}`,
-        cancel_url: `${window.location.origin}/cancel?orderId=${encodeURIComponent(o.id)}`,
-      };
-      const res = await fetch('/api/create-checkout-session', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) throw new Error((await res.text()) || 'Création de session Stripe échouée.');
-      const data = await res.json();
-      if (data?.id) {
-        const { error: stripeErr } = await stripe.redirectToCheckout({ sessionId: data.id });
-        if (stripeErr) throw stripeErr;
-      } else if (data?.url) {
-        window.location.href = data.url as string;
-      } else {
-        throw new Error('Réponse Stripe invalide (ni sessionId ni url).');
+          ],
+          success_url: `${window.location.origin}/success?orderId=${encodeURIComponent(o.id)}`,
+          cancel_url: `${window.location.origin}/cancel?orderId=${encodeURIComponent(o.id)}`,
+        };
+        const res = await fetch('/api/create-checkout-session', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+        });
+        if (!res.ok) throw new Error((await res.text()) || 'Création de session Stripe échouée.');
+        const data = await res.json();
+        if (data?.id) {
+          const { error: stripeErr } = await stripe.redirectToCheckout({ sessionId: data.id });
+          if (stripeErr) throw stripeErr;
+        } else if (data?.url) {
+          window.location.href = data.url as string;
+        } else {
+          throw new Error('Réponse Stripe invalide (ni sessionId ni url).');
+        }
+      } catch (e: any) {
+        setError(e?.message || 'Une erreur est survenue pendant le paiement.');
+      } finally {
+        setPayingId(null);
       }
-    } catch (e: any) {
-      setError(e?.message || 'Une erreur est survenue pendant le paiement.');
-    } finally {
-      setPayingId(null);
-    }
-  }, [canPay]);
+    },
+    [canPay]
+  );
 
   if (!mounted) return <main className="min-h-screen bg-gray-50 py-8" suppressHydrationWarning />;
 
   return (
+    <main className="relative min-h-screen overflow-hidden bg-white mt-20 py-6">
+      {/* Arrière-plan cadrillé façon Conditions.tsx */}
+      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage:
+              'linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)',
+            backgroundSize: '24px 24px',
+            maskImage: 'radial-gradient(ellipse at center, black, transparent 75%)',
+            WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 75%)',
+          }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/75 to-white" />
+      </div>
 
-    
-    <main className="min-h-screen bg-gray-50 py-8">
+      {/* Barre de navigation */}
+      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
+        <Navigation />
+      </div>
 
       <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Header */}
-
-                {/* Body */}
-
+        {/* Header aligné Conditions.tsx */}
         <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between mt-10">
           <Link href="/" className="sm:pt-1">
-            <Button variant="outline" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Retour
-            </Button>
+            <span className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
+              ← Retour
+            </span>
           </Link>
+
           <div className="text-center sm:text-right">
-            <h1 className="text-2xl md:text-3xl font-bold text-gray-900">Gestion des commandes</h1>
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black">
+              Gestion des commandes
+            </h1>
             <p className="text-sm md:text-base text-gray-600">
-              Gestion des commandes et paiements sécurisés
+              Consultez, payez et gérez vos commandes en toute simplicité.
             </p>
           </div>
         </div>
 
-        {/* Stats & Actions */}
+        {/* Stats & Actions (style cartes Conditions.tsx) */}
         <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <Card className="border-0 shadow-sm bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-gray-600 flex items-center gap-2">
-                <ShoppingCart className="h-4 w-4" /> Commandes
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold text-gray-900">{stats.count}</div>
-            </CardContent>
-          </Card>
-          <Card className="border-0 shadow-sm bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-gray-600 flex items-center gap-2">
-                <Euro className="h-4 w-4" /> Total (EUR)
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="text-2xl font-semibold text-gray-900">{formatEUR(stats.total)}</div>
-            </CardContent>
-          </Card>
-          <Card className="border-0 shadow-sm bg-white">
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm text-gray-600 flex items-center gap-2">
-                <FileText className="h-4 w-4" /> Actions
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
-              <Button
-                variant="destructive"
+          <div className="group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl bg-white border border-gray-200">
+            <h3 className="text-lg font-semibold text-black mb-1">Commandes</h3>
+            <p className="text-sm text-gray-600">Nombre total de commandes enregistrées.</p>
+            <div className="mt-4 text-3xl font-bold text-black">{stats.count}</div>
+          </div>
+
+          <div className="group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl bg-white border border-gray-200">
+            <h3 className="text-lg font-semibold text-black mb-1">Total</h3>
+            <p className="text-sm text-gray-600">Montant cumulé de toutes les commandes.</p>
+            <div className="mt-4 text-3xl font-bold text-black">{formatEUR(stats.total)}</div>
+          </div>
+
+          <div className="group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl bg-white border border-gray-200">
+            <h3 className="text-lg font-semibold text-black mb-1">Actions</h3>
+            <p className="text-sm text-gray-600">Gérer votre liste de commandes.</p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <button
                 onClick={handleClear}
                 disabled={orders.length === 0 || busyClear}
-                className="inline-flex items-center gap-2 w-full sm:w-auto"
+                className={`rounded-lg px-4 py-2 text-sm font-medium text-white ${
+                  orders.length === 0 || busyClear
+                    ? 'bg-gray-400 cursor-not-allowed'
+                    : 'bg-red-600 hover:bg-red-700'
+                }`}
               >
-                <Trash2 className="h-4 w-4" />
-                Tout effacer
-              </Button>
+                {busyClear ? 'Nettoyage…' : 'Tout effacer'}
+              </button>
               {!canPay && (
-                <Badge variant="destructive" className="gap-1">
-                  <AlertCircle className="h-3 w-3" />
+                <span className="inline-flex items-center rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700">
                   Paiement désactivé
-                </Badge>
+                </span>
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
 
-        {/* Alerts */}
+        {/* Alerte erreur */}
         {error && (
-          <div className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 flex items-center gap-2" aria-live="polite">
-            <AlertCircle className="h-4 w-4" />
+          <div
+            className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
+            role="alert"
+            aria-live="polite"
+          >
             {error}
           </div>
         )}
 
-        {/* Orders List */}
+        {/* Liste des commandes */}
         <div className="mt-8">
-          <Card className="border-0 shadow-sm bg-white">
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <FileText className="h-4 w-4" /> Commandes ({orders.length})
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
+          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-xl font-semibold text-black">
+                Commandes ({orders.length})
+              </h2>
+              <p className="text-sm text-gray-600">Détails et actions par commande.</p>
+            </div>
+
+            <div className="divide-y divide-gray-100">
               {loading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <Skeleton key={i} className="h-20 w-full rounded-xl" />
-                  ))}
-                </div>
+                <div className="p-6 text-sm text-gray-600">Chargement…</div>
               ) : orders.length === 0 ? (
-                <p className="text-gray-600 text-center py-8">Aucune commande enregistrée.</p>
+                <div className="p-6 text-sm text-gray-600">Aucune commande.</div>
               ) : (
-                <div className="grid grid-cols-1 gap-4">
-                  {orders.map((o) => (
-                    <div key={o.id} className="rounded-xl border border-gray-200 p-4 sm:p-5 lg:p-6 bg-white hover:shadow-md transition-shadow">
-                      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
-                        <div className="flex items-center gap-2">
-                          <Badge variant="secondary" className="text-xs">
-                            {o.kind === 'court' ? 'Terrain' :
-                             o.kind === 'menu' ? 'Snack' :
-                             o.kind === 'racket' ? 'Raquette' : 'Réservation'}
-                          </Badge>
-                          <div className="font-semibold text-gray-900">
-                            {getOrderLabel(o)} — <span className="text-gray-700">{formatEUR(o.__total || 0)}</span>
-                          </div>
-                        </div>
-                        <div className="text-xs text-gray-500 flex items-center gap-1">
-                          <Clock className="h-3 w-3" />
-                          {formatDateTime(o.createdAt)}
-                        </div>
+                orders.map((o) => (
+                  <div key={o.id} className="p-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+                    <div className="min-w-0">
+                      <div className="text-base font-semibold text-black truncate">
+                        {getOrderLabel(o)}
                       </div>
-                      <div className="mt-2 text-sm text-gray-700">{renderOrderDetails(o)}</div>
-                      <div className="mt-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-end">
-                        <Button
-                          variant="default"
-                          onClick={() => handlePay(o)}
-                          disabled={payingId === o.id || !canPay || Number(o.__total || 0) <= 0}
-                          className="inline-flex items-center gap-2 w-full sm:w-auto"
-                        >
-                          <CreditCard className="h-4 w-4" />
-                          {payingId === o.id ? 'Redirection...' : 'Payer'}
-                        </Button>
-                        <Button
-                          variant="outline"
-                          onClick={() => handleRemove(o.id)}
-                          className="inline-flex items-center gap-2 w-full sm:w-auto"
-                        >
-                          <Trash2 className="h-4 w-4" />
-                          Supprimer
-                        </Button>
+                      <div className="text-sm text-gray-600 truncate">
+                        {getOrderDescription(o)}
+                      </div>
+                      <div className="mt-1 text-xs text-gray-500">
+                        {o.createdAt ? `Créée le ${formatDateTime(o.createdAt)}` : ''}
+                      </div>
+                      <div className="mt-2 text-sm text-gray-700">
+                        {renderOrderDetails(o)}
                       </div>
                     </div>
-                  ))}
-                </div>
+
+                    <div className="flex items-center gap-3 sm:shrink-0">
+                      <div className="text-right">
+                        <div className="text-sm text-gray-600">Total</div>
+                        <div className="text-lg font-semibold text-black">
+                          {formatEUR(Number(o.__total || 0))}
+                        </div>
+                      </div>
+
+                      {canPay && (
+                        <button
+                          onClick={() => handlePay(o)}
+                          disabled={payingId === o.id}
+                          className={`rounded-lg px-4 py-2 text-sm font-medium text-white ${
+                            payingId === o.id ? 'bg-gray-400 cursor-wait' : 'bg-emerald-600 hover:bg-emerald-700'
+                          }`}
+                          title={payingId === o.id ? 'Paiement en cours…' : 'Payer cette commande'}
+                        >
+                          {payingId === o.id ? 'Paiement…' : 'Payer'}
+                        </button>
+                      )}
+
+                      <button
+                        onClick={() => handleRemove(o.id)}
+                        className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50"
+                        title="Supprimer cette commande"
+                      >
+                        Supprimer
+                      </button>
+                    </div>
+                  </div>
+                ))
               )}
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -288,35 +303,40 @@ function formatDateTime(v: any) {
 
 function getOrderLabel(o: Order) {
   switch (o.kind) {
-    case 'court': return `Terrain ${(o.courtName || '').toString().trim() || 'Inconnu'}`;
-    case 'menu': return 'Snacks/Boissons';
-    case 'racket': return `Location raquette${o.label ? ` - ${o.label}` : ''}`;
-    case 'booking': return `Réservation ${(o.serviceName || '').toString().trim() || 'Inconnue'}`;
-    default: return 'Commande';
+    case 'court':
+      return `Terrain ${(o.courtName || '').toString().trim() || 'Inconnu'}`;
+    case 'menu':
+      return 'Snacks/Boissons';
+    case 'racket':
+      return `Location raquette${o.label ? ` - ${o.label}` : ''}`;
+    case 'booking':
+      return `Réservation ${(o.serviceName || '').toString().trim() || 'Inconnue'}`;
+    default:
+      return 'Commande';
   }
 }
 
 function getOrderDescription(o: Order) {
   if (o.kind === 'menu') {
-    const items = o.items as { name: string; quantity: number }[] | undefined;
-    return items?.length ? items.map((it) => `${it.name} x${it.quantity}`).join(', ') : 'Commande snack';
+    const items = (o.items as { name: string; quantity: number }[] | undefined) || [];
+    return items.length ? items.map((it) => `${it.name} x${it.quantity}`).join(', ') : 'Commande snack';
   }
   if (o.kind === 'booking') {
     const date = o.date ? new Date(o.date).toLocaleDateString('fr-FR') : '';
-    const time = o.time || '';
-    const name = o.name || '';
+    const time = (o as any).time || '';
+    const name = (o as any).name || '';
     return [date && `${date} ${time}`, name].filter(Boolean).join(' — ');
   }
-  if (o.kind === 'court') return o.courtName || 'Court';
-  if (o.kind === 'racket') return o.label || 'Raquette';
+  if (o.kind === 'court') return (o as any).courtName || 'Court';
+  if (o.kind === 'racket') return (o as any).label || 'Raquette';
   return 'Commande Ti Padel';
 }
 
 function getOrderTotal(o: Order) {
-  if (o.kind === 'menu') return Number(o.total || 0);
-  if (o.kind === 'racket') return Number(o.price || 0);
-  if (o.kind === 'court') return Number(o.price || 0);
-  if (o.kind === 'booking') return Number(o.price || 0);
+  if (o.kind === 'menu') return Number((o as any).total || 0);
+  if (o.kind === 'racket') return Number((o as any).price || 0);
+  if (o.kind === 'court') return Number((o as any).price || 0);
+  if (o.kind === 'booking') return Number((o as any).price || 0);
   return 0;
 }
 
@@ -326,27 +346,41 @@ function enrichTotals(list: Order[]): UIOrder[] {
 
 function renderOrderDetails(o: Order) {
   if (o.kind === 'court') {
-    return <div>Terrain: {o.courtName} {o.price ? `- ${formatEUR(Number(o.price))}` : ''}</div>;
-  }
-  if (o.kind === 'menu') {
-    const items = o.items as { name: string; quantity: number }[] | undefined;
+    const price = (o as any).price;
+    const courtName = (o as any).courtName;
     return (
       <div>
-        <div>Total {formatEUR(Number(o.total || 0))}</div>
-        <div className="text-gray-600">{items?.map((it) => `${it.name} x${it.quantity}`).join(', ')}</div>
+        Terrain: {courtName} {price ? `- ${formatEUR(Number(price))}` : ''}
+      </div>
+    );
+  }
+  if (o.kind === 'menu') {
+    const items = (o.items as { name: string; quantity: number }[] | undefined) || [];
+    return (
+      <div>
+        <div>Articles:</div>
+        <div className="text-gray-600">{items.map((it) => `${it.name} x${it.quantity}`).join(', ') || '—'}</div>
       </div>
     );
   }
   if (o.kind === 'racket') {
-    return <div>Location raquette: {o.label} - {formatEUR(Number(o.price || 0))}</div>;
-  }
-  if (o.kind === 'booking') {
-    const date = o.date ? new Date(o.date) : null;
+    const label = (o as any).label;
+    const price = (o as any).price;
     return (
       <div>
-        <div>Réservation: {o.serviceName} {o.price ? `- ${formatEUR(Number(o.price))}` : ''}</div>
+        Location raquette: {label} - {formatEUR(Number(price || 0))}
+      </div>
+    );
+  }
+  if (o.kind === 'booking') {
+    const date = (o as any).date ? new Date((o as any).date) : null;
+    const time = (o as any).time || '';
+    const name = (o as any).name || '';
+    return (
+      <div>
+        <div>Réservation:</div>
         <div className="text-gray-600">
-          {date ? date.toLocaleDateString('fr-FR') : ''} à {o.time} — {o.name} ({o.email})
+          {date ? date.toLocaleDateString('fr-FR') : ''} {time ? `à ${time}` : ''} {name ? `— (${name})` : ''}
         </div>
       </div>
     );

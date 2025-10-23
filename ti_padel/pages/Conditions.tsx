@@ -17,9 +17,11 @@ export default function ConditionsPage() {
             Veuillez lire attentivement nos conditions d’utilisation. L’accès et l’usage du site impliquent leur acceptation.
           </h2>
 
+          {/* <div className="group bg-white/70 backdrop-blur-sm rounded-2xl p-6 shadow-lg border border-black/5 transition-all duration-300 hover:shadow-2xl hover:scale-[1.03]"> */}
+
           <div className="mt-10 md:mt-10">
             <div className={`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8 max-w-5xl mx-auto mb-12 ${styles.grid}`}>
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <ScaleIcon className="h-6 w-6" />
                 </div>
@@ -27,7 +29,7 @@ export default function ConditionsPage() {
                 <p className="text-sm text-gray-600">Accès licite, respect des règles et des droits des autres utilisateurs.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <ShieldCheckIcon className="h-6 w-6" />
                 </div>
@@ -35,7 +37,7 @@ export default function ConditionsPage() {
                 <p className="text-sm text-gray-600">Contenus protégés. Toute reproduction nécessite autorisation.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <ExclamationTriangleIcon className="h-6 w-6" />
                 </div>
@@ -43,7 +45,7 @@ export default function ConditionsPage() {
                 <p className="text-sm text-gray-600">Le site est fourni “en l’état”. Limitation de responsabilité dans les limites légales.</p>
               </div>
 
-              <div className={`group p-6 transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
+              <div className={`group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl ${styles.card}`}>
                 <div className={`mb-4 ${styles.cardIcon}`}>
                   <ArrowPathIcon className="h-6 w-6" />
                 </div>
