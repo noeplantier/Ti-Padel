@@ -6,50 +6,41 @@ export function Footer() {
   return (
     <footer className="bg-black text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div>
-            <div className="flex items-center space-x-3 mb-6">
-              <div className="relative h-12 w-12 bg-black flex-shrink-0">
-                <Image
-                  src="/images/tipadel-logo-white.png"
-                  alt="Logo Ti Padel"
-                  fill
-                  sizes="48px"
-                  className="object-contain"
-                  priority
-                />
-              </div>
-              <span className="text-2xl font-bold">Ti Padel</span>
-            </div>
-            <p className="text-gray-400 leading-relaxed">
-              École de Padel sport en Bretagne. Découvrez les joies du Padel dans un cadre exceptionnel.
-            </p>
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6 lg:gap-8">
+          {/* Horaires */}
+          <div className="flex-1">
+            <h3 className="font-semibold text-lg mb-4">Horaires</h3>
+            <ul className="space-y-2 text-gray-400">
+              <li className="hover:text-white transition-colors">Lun - Ven : 9h - 22h</li>
+              <li className="hover:text-white transition-colors">Sam - Dim : 8h - 23h</li>
+              <li className="hover:text-white transition-colors">Jours fériés : 10h - 20h</li>
+            </ul>
           </div>
-
+          
           {/* Services */}
-          <div>
+          <div className="flex-1">
             <h3 className="font-semibold text-lg mb-4">Services</h3>
             <ul className="space-y-2 text-gray-400">
               <li className="hover:text-white transition-colors">Padel entre amis</li>
               <li className="hover:text-white transition-colors">Petite restauration</li>
-              <li className="hover:text-white transition-colors">Événements privés</li>
-              <li className="hover:text-white transition-colors">Tournois</li>
+              <li className="hover:text-white transition-colors">Séminaires d'entreprise</li>
+              <li className="hover:text-white transition-colors">Évènements</li>
             </ul>
           </div>
 
           {/* Contact */}
-          <div>
+          <div className="flex-1">
             <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <ul className="space-y-2 text-gray-400">
-              <li className="hover:text-white transition-colors">+33 6 XX XX XX XX</li>
-              <li className="hover:text-white transition-colors">contact@tipadel.fr</li>
-              <li className="hover:text-white transition-colors">Bretagne, France</li>
+              <li className="hover:text-white transition-colors">Club Ti Padel</li>
+              <li className="hover:text-white transition-colors">56150 Baud</li>
+              <li className="hover:text-white transition-colors">+33 2 98 56 78 90</li>
+              <li className="hover:text-white transition-colors">tipadelbaud@gmail.com</li>
             </ul>
           </div>
 
           {/* Social */}
-          <div>
+          <div className="flex-1">
             <h3 className="font-semibold text-lg mb-4">Suivez-nous</h3>
             <div className="flex space-x-4">
               <a href="#" className="text-gray-400 hover:text-white transition-colors">
@@ -75,7 +66,7 @@ export function Footer() {
         <div className="border-t border-gray-800 mt-12 pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <p className="text-gray-400 text-sm">
-              © 2024 Ti Padel. Tous droits réservés.
+              © 2025 Ti Padel. Tous droits réservés.
             </p>
             <div className="flex space-x-6 text-sm text-gray-400">
               <Link href="/legalmentions" className="hover:text-white transition-colors">
@@ -88,6 +79,9 @@ export function Footer() {
                 CGU
               </Link>
             </div>
+            <p className="text-gray-400 text-sm mt-4 md:mt-0">
+              Fait avec 🤍 en Bretagne
+            </p>
           </div>
         </div>
       </div>
