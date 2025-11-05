@@ -23,7 +23,7 @@ export default function ConditionsPage() {
           {/* Bouton de redirection vers Hero */}
           <div className="mt-6 flex justify-center">
             <Link href="/#hero" className="inline-flex items-center rounded-full bg-black text-white px-5 py-2 text-sm md:text-base shadow hover:shadow-lg transition">
-              Revenir à la page Hero
+              Revenir à l'accueil
             </Link>
           </div>
 
