@@ -1,17 +1,26 @@
 import {Waves, Facebook, Instagram, Mail, LinkedinIcon, MessageCircle} from 'lucide-react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 export function Footer() {
   return (
     <footer className="bg-black text-white py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div>
-            <div className="flex items-center space-x-2 mb-6">
-              <Waves className="h-8 w-8 text-white" />
-              <span className="text-2xl font-bold">Ti Padel</span>
-            </div>
+            <div className="flex space-x-2">
+              <div className="relative h-28 w-28">
+                <Image
+                  src="images/tipadel-logo-white.png"
+                  alt="Logo Ti Padel"
+                  fill
+                  sizes="32px"
+                  className="object-contain"
+                  priority
+                />
+              </div>
+              </div>
             <p className="text-gray-400 leading-relaxed">
               École de Padel sport en Bretagne. Découvrez les joies du Padel dans un cadre exceptionnel.
             </p>
@@ -53,7 +62,7 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-          <h2 className="text-xl font-bold text-white mb-4">Contact</h2>
+          <h3 className="font-semibold text-lg mb-4">Contact</h3>
             <div className="space-y-2 text-gray-400 mb-6">
               <p>Club Ti Padel</p>
               <p>56150 Baud</p>
@@ -76,7 +85,6 @@ export function Footer() {
                 <MessageCircle className="h-5 w-5" />
               </a>
             </div>
-            {/* ...existing code... */}
           </div>
         </div>
 
