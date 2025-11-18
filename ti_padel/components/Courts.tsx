@@ -37,7 +37,7 @@ const [courts, setCourts] = useState<Court[]>([
             name: 'Terrain B', 
             type: 'extérieur', 
             surface: 'synthétique', 
-            occupied: true, 
+            occupied: false, 
             hourlyRate: 12.5,
             capacity: 4,
             features: ['Éclairage LED', 'Vestiaires', 'Gradin'],
