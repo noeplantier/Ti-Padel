@@ -16,7 +16,7 @@ export function Hero() {
   
   return (
     <section suppressHydrationWarning id="accueil" className="relative min-h-screen flex items-center justify-center hero-gradient celtic-pattern">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
+      <div className="max-w-9xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="text-center">
           {/* Main Heading */}
           <h1 className="text-6xl mt-2 md:text-9xl font-bold text-black mb-6 tracking-tight">
