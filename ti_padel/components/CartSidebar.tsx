@@ -1,9 +1,7 @@
 'use client';
 
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Link from 'next/link';
+import React, { useCallback, useEffect, useMemo, useState, forwardRef, useImperativeHandle } from 'react';
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
-import { Navigation } from '@/components/Navigation';
 import { getOrders, removeOrder, clearOrders, type Order } from '@/lib/orders';
 
 type UIOrder = Order & { __total?: number };
@@ -13,17 +11,26 @@ const STRIPE_PK =
 const isFakeStripe = /FAKE_TIPADEL/i.test(STRIPE_PK) || !STRIPE_PK;
 const stripePromise: Promise<Stripe | null> = isFakeStripe ? Promise.resolve(null) : loadStripe(STRIPE_PK);
 
-export default function BackOfficeCommandesPage() {
+export interface CartSidebarRef {
+  open: () => void;
+  close: () => void;
+}
+
+export const CartSidebar = forwardRef<CartSidebarRef>((props, ref) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [orders, setOrders] = useState<UIOrder[]>([]);
   const [payingId, setPayingId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [busyClear, setBusyClear] = useState(false);
-  const [loading, setLoading] = useState(true);
+
+  useImperativeHandle(ref, () => ({
+    open: () => setIsOpen(true),
+    close: () => setIsOpen(false),
+  }));
 
   useEffect(() => {
     setMounted(true);
-    setLoading(false);
   }, []);
 
   useEffect(() => {
@@ -71,7 +78,7 @@ export default function BackOfficeCommandesPage() {
       }
       const stripe = await stripePromise;
       if (!stripe) {
-        setError('Échec d’initialisation de Stripe.');
+        setError('Échec d\'initialisation de Stripe.');
         return;
       }
       try {
@@ -122,170 +129,154 @@ export default function BackOfficeCommandesPage() {
     [canPay]
   );
 
-  if (!mounted) return <main className="min-h-screen bg-gray-50 py-8" suppressHydrationWarning />;
+  if (!mounted) return null;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-white mt-20 py-6">
-      {/* Arrière-plan cadrillé façon Conditions.tsx */}
-      <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
+    <>
+      {/* Overlay */}
+      {isOpen && (
         <div
-          className="absolute inset-0"
-          style={{
-            backgroundImage:
-              'linear-gradient(to right, rgba(0,0,0,0.06) 1px, transparent 1px), linear-gradient(to bottom, rgba(0,0,0,0.06) 1px, transparent 1px)',
-            backgroundSize: '24px 24px',
-            maskImage: 'radial-gradient(ellipse at center, black, transparent 75%)',
-            WebkitMaskImage: 'radial-gradient(ellipse at center, black, transparent 75%)',
-          }}
+          className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300"
+          onClick={() => setIsOpen(false)}
+          aria-hidden="true"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-white/85 via-white/75 to-white" />
-      </div>
+      )}
 
-      {/* Barre de navigation */}
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        <Navigation />
-      </div>
-
-      <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8">
-        {/* Header aligné Conditions.tsx */}
-        <div className="flex flex-col-reverse gap-4 sm:flex-row sm:items-center sm:justify-between mt-10">
-          <Link href="/" className="sm:pt-1">
-            <span className="inline-flex items-center gap-2 rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 hover:bg-gray-50">
-              ← Retour
-            </span>
-          </Link>
-
-          <div className="text-center sm:text-right">
-            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-black">
-              Gestion des commandes
-            </h1>
-            <p className="text-sm md:text-base text-gray-600">
-              Consultez, payez et gérez vos commandes en toute simplicité.
-            </p>
-          </div>
-        </div>
-
-        {/* Stats & Actions (style cartes Conditions.tsx) */}
-        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
-          <div className="group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl bg-white border border-gray-200">
-            <h3 className="text-lg font-semibold text-black mb-1">Commandes</h3>
-            <p className="text-sm text-gray-600">Nombre total de commandes enregistrées.</p>
-            <div className="mt-4 text-3xl font-bold text-black">{stats.count}</div>
-          </div>
-
-          <div className="group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl bg-white border border-gray-200">
-            <h3 className="text-lg font-semibold text-black mb-1">Total</h3>
-            <p className="text-sm text-gray-600">Montant cumulé de toutes les commandes.</p>
-            <div className="mt-4 text-3xl font-bold text-black">{formatEUR(stats.total)}</div>
-          </div>
-
-          <div className="group p-6 rounded-2xl transition-all duration-300 hover:shadow-2xl bg-white border border-gray-200">
-            <h3 className="text-lg font-semibold text-black mb-1">Actions</h3>
-            <p className="text-sm text-gray-600">Gérer votre liste de commandes.</p>
-            <div className="mt-4 flex flex-wrap gap-3">
-              <button
-                onClick={handleClear}
-                disabled={orders.length === 0 || busyClear}
-                className={`rounded-lg px-4 py-2 text-sm font-medium text-white ${
-                  orders.length === 0 || busyClear
-                    ? 'bg-gray-400 cursor-not-allowed'
-                    : 'bg-red-600 hover:bg-red-700'
-                }`}
-              >
-                {busyClear ? 'Nettoyage…' : 'Tout effacer'}
-              </button>
-              {!canPay && (
-                <span className="inline-flex items-center rounded-lg bg-red-100 px-2.5 py-1.5 text-xs font-medium text-red-700">
-                  Paiement désactivé
-                </span>
-              )}
+      {/* Sidebar */}
+      <div
+        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[500px] lg:w-[600px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
+          isOpen ? 'translate-x-0' : 'translate-x-full'
+        }`}
+      >
+        <div className="flex h-full flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
+            <div>
+              <h2 className="text-2xl font-bold text-black">Panier</h2>
+              <p className="text-sm text-gray-600">{stats.count} commande{stats.count > 1 ? 's' : ''}</p>
             </div>
+            <button
+              onClick={() => setIsOpen(false)}
+              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+              aria-label="Fermer le panier"
+            >
+              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
           </div>
-        </div>
 
-        {/* Alerte erreur */}
-        {error && (
-          <div
-            className="mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700"
-            role="alert"
-            aria-live="polite"
-          >
-            {error}
-          </div>
-        )}
-
-        {/* Liste des commandes */}
-        <div className="mt-8">
-          <div className="rounded-2xl border border-gray-200 bg-white shadow-sm">
-            <div className="px-6 py-4 border-b border-gray-200">
-              <h2 className="text-xl font-semibold text-black">
-                Commandes ({orders.length})
-              </h2>
-              <p className="text-sm text-gray-600">Détails et actions par commande.</p>
+          {/* Stats Cards */}
+          <div className="border-b border-gray-200 px-6 py-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
+                <div className="text-sm text-gray-600">Total</div>
+                <div className="text-2xl font-bold text-black">{formatEUR(stats.total)}</div>
+              </div>
+              <div className="flex items-center justify-center">
+                <button
+                  onClick={handleClear}
+                  disabled={orders.length === 0 || busyClear}
+                  className={`w-full rounded-lg px-4 py-2 text-sm font-medium text-white ${
+                    orders.length === 0 || busyClear
+                      ? 'bg-gray-400 cursor-not-allowed'
+                      : 'bg-red-600 hover:bg-red-700'
+                  }`}
+                >
+                  {busyClear ? 'Nettoyage…' : 'Tout effacer'}
+                </button>
+              </div>
             </div>
+            {!canPay && (
+              <div className="mt-3 rounded-lg bg-red-100 px-3 py-2 text-xs font-medium text-red-700">
+                ⚠️ Paiement désactivé
+              </div>
+            )}
+          </div>
 
-            <div className="divide-y divide-gray-100">
-              {loading ? (
-                <div className="p-6 text-sm text-gray-600">Chargement…</div>
-              ) : orders.length === 0 ? (
-                <div className="p-6 text-sm text-gray-600">Aucune commande.</div>
-              ) : (
-                orders.map((o) => (
-                  <div key={o.id} className="p-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <div className="min-w-0">
-                      <div className="text-base font-semibold text-black truncate">
-                        {getOrderLabel(o)}
-                      </div>
-                      <div className="text-sm text-gray-600 truncate">
-                        {getOrderDescription(o)}
-                      </div>
-                      <div className="mt-1 text-xs text-gray-500">
-                        {o.createdAt ? `Créée le ${formatDateTime(o.createdAt)}` : ''}
-                      </div>
-                      <div className="mt-2 text-sm text-gray-700">
-                        {renderOrderDetails(o)}
-                      </div>
-                    </div>
+          {/* Error Alert */}
+          {error && (
+            <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+              {error}
+            </div>
+          )}
 
-                    <div className="flex items-center gap-3 sm:shrink-0">
-                      <div className="text-right">
-                        <div className="text-sm text-gray-600">Total</div>
-                        <div className="text-lg font-semibold text-black">
+          {/* Orders List - Scrollable */}
+          <div className="flex-1 overflow-y-auto px-6 py-4">
+            {orders.length === 0 ? (
+              <div className="flex h-full flex-col items-center justify-center text-center">
+                <svg className="h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+                </svg>
+                <p className="text-gray-600">Votre panier est vide</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {orders.map((o) => (
+                  <div key={o.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0 flex-1">
+                        <div className="text-base font-semibold text-black">{getOrderLabel(o)}</div>
+                        <div className="mt-1 text-sm text-gray-600">{getOrderDescription(o)}</div>
+                        {o.createdAt && (
+                          <div className="mt-1 text-xs text-gray-500">{formatDateTime(o.createdAt)}</div>
+                        )}
+                        <div className="mt-2 text-sm text-gray-700">{renderOrderDetails(o)}</div>
+                        <div className="mt-3 text-lg font-bold text-emerald-600">
                           {formatEUR(Number(o.__total || 0))}
                         </div>
                       </div>
+                    </div>
 
+                    <div className="mt-4 flex gap-2">
                       {canPay && (
                         <button
                           onClick={() => handlePay(o)}
                           disabled={payingId === o.id}
-                          className={`rounded-lg px-4 py-2 text-sm font-medium text-white ${
+                          className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium text-white ${
                             payingId === o.id ? 'bg-gray-400 cursor-wait' : 'bg-emerald-600 hover:bg-emerald-700'
                           }`}
-                          title={payingId === o.id ? 'Paiement en cours…' : 'Payer cette commande'}
                         >
                           {payingId === o.id ? 'Paiement…' : 'Payer'}
                         </button>
                       )}
-
                       <button
                         onClick={() => handleRemove(o.id)}
-                        className="rounded-lg px-4 py-2 text-sm font-medium text-gray-700 border border-gray-300 hover:bg-gray-50"
-                        title="Supprimer cette commande"
+                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
                       >
                         Supprimer
                       </button>
                     </div>
                   </div>
-                ))
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
+
+          {/* Footer - Checkout Button */}
+          {orders.length > 0 && canPay && (
+            <div className="border-t border-gray-200 px-6 py-4">
+              <button
+                className="w-full rounded-lg bg-emerald-600 px-6 py-4 text-lg font-semibold text-white hover:bg-emerald-700 transition-colors"
+                onClick={() => {
+                  if (orders.length === 1) {
+                    handlePay(orders[0]);
+                  } else {
+                    alert('Paiement groupé à venir - payez individuellement pour le moment');
+                  }
+                }}
+              >
+                Payer {formatEUR(stats.total)}
+              </button>
+            </div>
+          )}
         </div>
       </div>
-    </main>
+    </>
   );
-}
+});
+
+CartSidebar.displayName = 'CartSidebar';
 
 // --- Utils ---
 function formatEUR(n: number) {
@@ -348,11 +339,7 @@ function renderOrderDetails(o: Order) {
   if (o.kind === 'court') {
     const price = (o as any).price;
     const courtName = (o as any).courtName;
-    return (
-      <div>
-        Terrain: {courtName} {price ? `- ${formatEUR(Number(price))}` : ''}
-      </div>
-    );
+    return <div>Terrain: {courtName} {price ? `- ${formatEUR(Number(price))}` : ''}</div>;
   }
   if (o.kind === 'menu') {
     const items = (o.items as { name: string; quantity: number }[] | undefined) || [];
@@ -366,11 +353,7 @@ function renderOrderDetails(o: Order) {
   if (o.kind === 'racket') {
     const label = (o as any).label;
     const price = (o as any).price;
-    return (
-      <div>
-        Location raquette: {label} - {formatEUR(Number(price || 0))}
-      </div>
-    );
+    return <div>Location raquette: {label} - {formatEUR(Number(price || 0))}</div>;
   }
   if (o.kind === 'booking') {
     const date = (o as any).date ? new Date((o as any).date) : null;

@@ -1,12 +1,15 @@
 'use client';
 import { useState, useEffect } from 'react';
-import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { Menu, ShoppingCart, X } from 'lucide-react';
 import Image from 'next/image';
 import '../app/globals.css';
 
-export function Navigation() {
+interface NavigationProps {
+  onCartClick?: () => void;
+}
+
+export function Navigation({ onCartClick }: NavigationProps) {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -25,131 +28,139 @@ export function Navigation() {
   };
 
   return (
-      <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-1 ${
-          isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
-      }`}>
-        <div className="max-w-7xl mx-auto px-0"> 
-          <div className="flex items-center justify-between h-16 w-full">
-            {/* Logo à l'extrême gauche, sans marge */}
-            <div className="ml-0">
-              <Image
-                  src="/images/tipadel-logo.png"
-                  alt="Ti Padel Logo"
-                  width={200}
-                  height={200}
-                  className="shaking-image h-22 w-22"
-              />
-            </div>
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-1 ${
+      isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
+    }`}>
+      <div className="max-w-7xl mx-auto px-0"> 
+        <div className="flex items-center justify-between h-16 w-full">
+          {/* Logo à l'extrême gauche, sans marge */}
+          <div className="ml-0">
+            <Image
+              src="/images/tipadel-logo.png"
+              alt="Ti Padel Logo"
+              width={200}
+              height={200}
+              className="shaking-image h-22 w-22"
+            />
+          </div>
 
-            {/* Desktop Navigation centrée */}
-            <div className="hidden md:flex md:absolute md:left-1/2 md:transform md:-translate-x-1/2 items-center space-x-8">
+          {/* Desktop Navigation centrée */}
+          <div className="hidden md:flex md:absolute md:left-1/2 md:transform md:-translate-x-1/2 items-center space-x-8">
+            <button
+              onClick={() => scrollToSection('accueil')}
+              className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+            >
+              Accueil
+            </button>
+            <button
+              onClick={() => scrollToSection('services')}
+              className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+            >
+              Services
+            </button>
+            <button
+              onClick={() => scrollToSection('propos')}
+              className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+            >
+              À Propos
+            </button>
+            <button
+              onClick={() => scrollToSection('terrains')}
+              className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+            >
+              Terrains
+            </button>
+            <button
+              onClick={() => scrollToSection('reservation')}
+              className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+            >
+              Réserver
+            </button>
+            <button
+              onClick={() => scrollToSection('contact')}
+              className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+            >
+              Contact
+            </button>
+          </div>
+
+          {/* Panier à l'extrême droite, sans marge */}
+          <div className="hidden md:block mr-0">
+            <button 
+              onClick={onCartClick}
+              className="text-black hover:text-gray-700 transition-colors"
+              aria-label="Ouvrir le panier"
+            >
+              <ShoppingCart className="h-6 w-6" />
+            </button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <div className="md:hidden">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
+        </div>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="md:hidden bg-white border-t border-gray-200">
+            <div className="px-2 pt-2 pb-3 space-y-1">
               <button
-                  onClick={() => scrollToSection('accueil')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                onClick={() => scrollToSection('accueil')}
+                className="block w-full text-left px-3 py-2 gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Accueil
               </button>
               <button
-                  onClick={() => scrollToSection('services')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                onClick={() => scrollToSection('services')}
+                className="block w-full text-left px-3 py-2 gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Services
               </button>
               <button
-                  onClick={() => scrollToSection('propos')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                onClick={() => scrollToSection('propos')}
+                className="block w-full text-left px-3 py-2 gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 À Propos
               </button>
               <button
-                  onClick={() => scrollToSection('terrains')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                onClick={() => scrollToSection('terrains')}
+                className="block w-full text-left px-3 py-2 gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Terrains
               </button>
               <button
-                  onClick={() => scrollToSection('reservation')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                onClick={() => scrollToSection('reservation')}
+                className="block w-full text-left px-3 py-2 gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Réserver
               </button>
-{/* 
               <button
-                  onClick={() => scrollToSection('carte')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-              >
-                Carte
-              </button> */}
-              
-              <button
-                  onClick={() => scrollToSection('contact')}
-                  className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
+                onClick={() => scrollToSection('contact')}
+                className="block w-full text-left px-3 py-2 gradient-underline-effect text-gray-900 hover:text-black font-bold"
               >
                 Contact
               </button>
-            </div>
-
-            {/* Panier à l'extrême droite, sans marge */}
-            <div className="hidden md:block mr-0">
-              <Link href="/backoffice/commandes" className="text-black">
-                <ShoppingCart className="h-6 w-6" />
-              </Link>
-            </div>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden">
-              <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+              <button
+                onClick={() => {
+                  setIsMenuOpen(false);
+                  onCartClick?.();
+                }}
+                className="flex items-center gap-2 w-full text-left px-3 py-2 text-gray-900 hover:text-black font-bold"
               >
-                {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-              </Button>
+                <ShoppingCart className="h-5 w-5" />
+                Panier
+              </button>
             </div>
           </div>
-
-          {/* Mobile Menu */}
-          {isMenuOpen && (
-              <div className="md:hidden bg-white border-t border-gray-200">
-                <div className="px-2 pt-2 pb-3 space-y-1">
-                  <button
-                      onClick={() => scrollToSection('accueil')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Accueil
-                  </button>
-                  <button
-                      onClick={() => scrollToSection('services')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Services
-                  </button>
-                  <button
-                      onClick={() => scrollToSection('propos')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    À Propos
-                  </button>
-                  <button
-                      onClick={() => scrollToSection('terrains')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Terrains
-                  </button>
-                  <button
-                      onClick={() => scrollToSection('reservation')}
-                      className="gradient-underline-effect text-gray-900 hover:text-black font-bold"
-                  >
-                    Réserver
-                  </button>
-
-                  <Link href="/backoffice/commandes" className="text-gray-400 hover:text-black transition-colors">
-                    <ShoppingCart className="h-5 w-5" />
-                  </Link>
-                </div>
-              </div>
-          )}
-        </div>
-      </nav>
+        )}
+      </div>
+    </nav>
   );
 }
