@@ -144,7 +144,7 @@ export const CartSidebar = forwardRef<CartSidebarRef>((props, ref) => {
 
       {/* Sidebar */}
       <div
-        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[500px] lg:w-[600px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[320px] lg:w-[420px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
       >

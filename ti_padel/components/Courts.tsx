@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
-import { addOrder, type CourtOrder } from '@/lib/orders';
+import { addOrder } from '@/lib/orders';
 import { MapPin, Users, Calendar, Clock } from 'lucide-react';
 
 interface Court {
@@ -20,7 +20,7 @@ interface Court {
 }
 
 export function CourtsPage() {
-const [courts, setCourts] = useState<Court[]>([
+    const [courts, setCourts] = useState<Court[]>([
         { 
             id: 1, 
             name: 'Terrain A', 
@@ -54,20 +54,25 @@ const [courts, setCourts] = useState<Court[]>([
             features: ['Climatisation', 'Vestiaires', 'Éclairage LED'],
             nextAvailable: '15:00'
         },
-  ]);
+    ]);
 
     const toggleCourtStatus = (id: number) => {
         const target = courts.find(c => c.id === id);
         if (target && !target.occupied) {
-            // Save as an order when reserving a free court
-            const courtOrder: Omit<CourtOrder, 'id' | 'createdAt'> = {
+            // Ajouter la commande au panier - Le panier s'ouvrira automatiquement !
+            addOrder({
+                id: `court-${target.id}-${Date.now()}`,
                 kind: 'court',
                 courtId: target.id,
                 courtName: target.name,
                 price: target.hourlyRate,
-            };
-            addOrder(courtOrder);
+                surface: target.surface,
+                type: target.type,
+                duration: '90 minutes',
+            });
         }
+        
+        // Marquer le terrain comme occupé/libre
         setCourts(courts.map(court =>
             court.id === id ? { ...court, occupied: !court.occupied } : court
         ));
@@ -80,7 +85,11 @@ const [courts, setCourts] = useState<Court[]>([
     // Composant simple pour représenter un terrain de padel
     const CourtVisual = ({ court }: { court: Court }) => (
         <div className="relative">
-            <div className={`w-24 h-16 mx-auto rounded border-2 ${court.occupied ? 'bg-gray-200 border-gray-200' : 'border-green-500 bg-green-100'} flex items-center justify-center`}>
+            <div className={`w-24 h-16 mx-auto rounded border-2 ${
+                court.occupied 
+                    ? 'bg-gray-200 border-gray-400' 
+                    : 'border-green-500 bg-green-100'
+            } flex items-center justify-center transition-all duration-300`}>
                 <span className="text-xs font-bold text-center px-1">
                     {court.name}
                 </span>
@@ -92,8 +101,8 @@ const [courts, setCourts] = useState<Court[]>([
         <section id="terrains" className="py-24 bg-gray-100">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-12">
-                <h2 className="text-6xl font-bold text-black mb-4">Nos Terrains</h2>
-                <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                    <h2 className="text-6xl font-bold text-black mb-4">Nos Terrains</h2>
+                    <p className="text-lg text-gray-600 max-w-2xl mx-auto">
                         Découvrez nos terrains de padel et réservez celui qui vous convient. 
                     </p>
                 </div>
@@ -125,7 +134,14 @@ const [courts, setCourts] = useState<Court[]>([
                     <h2 className="text-2xl font-bold text-gray-900 mb-6">Détails des terrains</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {courts.map((court) => (
-                            <Card key={court.id} className={court.occupied ? 'border-red-200 bg-red-50' : 'border-green-200 bg-green-50'}>
+                            <Card 
+                                key={court.id} 
+                                className={`transition-all duration-300 ${
+                                    court.occupied 
+                                        ? 'border-red-200 bg-red-50' 
+                                        : 'border-green-200 bg-green-50 hover:shadow-lg'
+                                }`}
+                            >
                                 <CardHeader>
                                     <div className="flex justify-between items-start">
                                         <div>
@@ -184,10 +200,10 @@ const [courts, setCourts] = useState<Court[]>([
                                 <CardFooter>
                                     <Button
                                         onClick={() => toggleCourtStatus(court.id)}
-                                        className={`w-full ${
+                                        className={`w-full transition-all duration-300 ${
                                             court.occupied
                                                 ? 'bg-red-600 hover:bg-red-700 text-white'
-                                                : 'bg-green-600 hover:bg-green-700 text-white'
+                                                : 'bg-green-600 hover:bg-green-700 text-white shadow-md hover:shadow-lg'
                                         }`}
                                     >
                                         {court.occupied ? 'Libérer ce terrain' : 'Réserver ce terrain'}
