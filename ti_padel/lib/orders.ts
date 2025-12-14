@@ -1,52 +1,121 @@
-export interface Order {
+/**
+ * Types de base pour les commandes
+ */
+export interface BaseOrder {
   id: string;
-  kind: 'booking' | 'racket';
+  kind: 'booking' | 'racket' | 'product' | 'membership';
   createdAt: number;
+  price: number;
 }
 
-export interface BookingOrder extends Order {
+/**
+ * Commande de réservation de terrain
+ */
+export interface BookingOrder extends BaseOrder {
   kind: 'booking';
   date: string;
   time: string;
   name?: string;
-  courtId?: string;
-  duration?: number;
-  serviceName?: string;
-  price: number;
   email?: string;
-  phone?: number;
+  phone?: string;
   notes?: string;
-  priceType?: 'standard' | 'member' | 'promo';
-
+  courtId?: number | string;
+  courtName?: string;
+  surface?: string;
+  type?: string;
+  duration?: number | string;
+  serviceName?: string;
 }
 
-export interface RacketOrder extends Order {
+/**
+ * Commande de location de raquette
+ */
+export interface RacketOrder extends BaseOrder {
   kind: 'racket';
   label: string;
   racketId?: string;
   quantity?: number;
-  price: number;
 }
 
-type OrdersChangeListener = (orders: Order[]) => void;
-
-const STORAGE_KEY = 'tipadel-orders';
-let listeners: OrdersChangeListener[] = [];
-let ordersCache: Order[] | null = null;
+/**
+ * Commande de produit
+ */
+export interface ProductOrder extends BaseOrder {
+  kind: 'product';
+  productId: string;
+  productName: string;
+  quantity: number;
+}
 
 /**
- * Récupère les commandes depuis le localStorage avec mise en cache
+ * Commande d'adhésion
+ */
+export interface MembershipOrder extends BaseOrder {
+  kind: 'membership';
+  membershipType: string;
+  validUntil: string;
+}
+
+/**
+ * Union de tous les types de commandes
+ */
+export type Order = BookingOrder | RacketOrder | ProductOrder | MembershipOrder;
+
+/**
+ * Type pour les listeners de changement
+ */
+type OrdersChangeListener = (orders: Order[]) => void;
+
+/**
+ * Configuration
+ */
+const STORAGE_KEY = 'tipadel-orders';
+const CACHE_ENABLED = true;
+
+/**
+ * État interne
+ */
+let listeners: OrdersChangeListener[] = [];
+let ordersCache: Order[] | null = null;
+let lastStorageUpdate = 0;
+
+/**
+ * Génère un ID unique pour une commande
+ */
+function generateOrderId(): string {
+  return `order_${Date.now()}_${Math.random().toString(36).substring(2, 11)}`;
+}
+
+/**
+ * Vérifie si nous sommes côté client
+ */
+function isClient(): boolean {
+  return typeof window !== 'undefined';
+}
+
+/**
+ * Récupère les commandes depuis le localStorage avec mise en cache optimisée
  */
 export function getOrders(): Order[] {
-  if (typeof window === 'undefined') return [];
+  if (!isClient()) return [];
   
   try {
+    // Utiliser le cache si disponible et activé
+    if (CACHE_ENABLED && ordersCache !== null) {
+      return [...ordersCache]; // Retourner une copie pour éviter les mutations
+    }
+
     const stored = localStorage.getItem(STORAGE_KEY);
-    const orders = stored ? JSON.parse(stored) : [];
-    ordersCache = orders;
+    const orders: Order[] = stored ? JSON.parse(stored) : [];
+    
+    // Mise en cache
+    if (CACHE_ENABLED) {
+      ordersCache = orders;
+    }
+    
     return orders;
   } catch (error) {
-    console.error('Erreur lors de la récupération des commandes:', error);
+    console.error('[Orders] Erreur lors de la récupération:', error);
     return [];
   }
 }
@@ -55,43 +124,59 @@ export function getOrders(): Order[] {
  * Sauvegarde les commandes dans le localStorage et notifie les listeners
  */
 function saveOrders(orders: Order[]): void {
-  if (typeof window === 'undefined') return;
+  if (!isClient()) return;
   
   try {
+    const now = Date.now();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(orders));
-    ordersCache = orders;
-    notifyListeners(orders);
+    
+    // Mettre à jour le cache
+    if (CACHE_ENABLED) {
+      ordersCache = [...orders];
+    }
+    
+    lastStorageUpdate = now;
+    
+    // Notifier tous les listeners de manière asynchrone pour éviter les blocages
+    queueMicrotask(() => notifyListeners(orders));
   } catch (error) {
-    console.error('Erreur lors de la sauvegarde des commandes:', error);
+    console.error('[Orders] Erreur lors de la sauvegarde:', error);
     throw new Error('Impossible de sauvegarder la commande');
   }
 }
 
 /**
- * Notifie tous les listeners des changements
+ * Notifie tous les listeners des changements de manière sécurisée
  */
 function notifyListeners(orders: Order[]): void {
+  const ordersCopy = [...orders]; // Copie pour éviter les mutations
+  
   listeners.forEach(listener => {
     try {
-      listener(orders);
+      listener(ordersCopy);
     } catch (error) {
-      console.error('Erreur dans un listener:', error);
+      console.error('[Orders] Erreur dans un listener:', error);
     }
   });
 }
 
 /**
- * S'abonner aux changements du panier
+ * S'abonner aux changements du panier avec notification immédiate
  */
 export function subscribeToOrders(listener: OrdersChangeListener): () => void {
+  if (!isClient()) {
+    return () => {}; // Retourner une fonction vide côté serveur
+  }
+
+  // Ajouter le listener
   listeners.push(listener);
   
   // Notifier immédiatement avec les données actuelles
-  const currentOrders = ordersCache ?? getOrders();
   try {
+    const currentOrders = getOrders();
     listener(currentOrders);
   } catch (error) {
-    console.error('Erreur lors de la notification initiale:', error);
+    console.error('[Orders] Erreur lors de la notification initiale:', error);
   }
   
   // Retourner la fonction de désabonnement
@@ -101,21 +186,51 @@ export function subscribeToOrders(listener: OrdersChangeListener): () => void {
 }
 
 /**
- * Génère un ID unique pour une commande
+ * Valide qu'une commande a tous les champs requis selon son type
  */
-function generateOrderId(): string {
-  return `order_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+export function validateOrder(order: Order): boolean {
+  // Validation commune
+  if (!order.id || !order.kind || !order.createdAt || order.price === undefined) {
+    return false;
+  }
+  
+  // Validation spécifique selon le type
+  switch (order.kind) {
+    case 'booking':
+      const booking = order as BookingOrder;
+      return !!(booking.date && booking.time);
+    
+    case 'racket':
+      const racket = order as RacketOrder;
+      return !!racket.label;
+    
+    case 'product':
+      const product = order as ProductOrder;
+      return !!(product.productId && product.productName && product.quantity > 0);
+    
+    case 'membership':
+      const membership = order as MembershipOrder;
+      return !!(membership.membershipType && membership.validUntil);
+    
+    default:
+      return false;
+  }
 }
 
 /**
- * Ajoute une commande au panier
+ * Ajoute une commande au panier de manière optimisée
  */
-export function addOrder(order: Omit<Order, 'id' | 'createdAt'>): Order {
+export function addOrder(orderData: Omit<Order, 'id' | 'createdAt'>): Order {
   const newOrder: Order = {
-    ...order,
+    ...orderData,
     id: generateOrderId(),
     createdAt: Date.now(),
   } as Order;
+  
+  // Valider la commande
+  if (!validateOrder(newOrder)) {
+    throw new Error('Commande invalide');
+  }
   
   const orders = getOrders();
   const updatedOrders = [...orders, newOrder];
@@ -125,31 +240,47 @@ export function addOrder(order: Omit<Order, 'id' | 'createdAt'>): Order {
 }
 
 /**
- * Ajoute une réservation de terrain au panier
+ * Ajoute une réservation de terrain (helper typé)
  */
 export function addBookingOrder(booking: Omit<BookingOrder, 'id' | 'kind' | 'createdAt'>): BookingOrder {
-  const order = addOrder({
+  return addOrder({
     kind: 'booking',
     ...booking,
   }) as BookingOrder;
-  
-  return order;
 }
 
 /**
- * Ajoute une location de raquette au panier
+ * Ajoute une location de raquette (helper typé)
  */
 export function addRacketOrder(racket: Omit<RacketOrder, 'id' | 'kind' | 'createdAt'>): RacketOrder {
-  const order = addOrder({
+  return addOrder({
     kind: 'racket',
     ...racket,
   }) as RacketOrder;
-  
-  return order;
 }
 
 /**
- * Supprime une commande du panier
+ * Ajoute un produit (helper typé)
+ */
+export function addProductOrder(product: Omit<ProductOrder, 'id' | 'kind' | 'createdAt'>): ProductOrder {
+  return addOrder({
+    kind: 'product',
+    ...product,
+  }) as ProductOrder;
+}
+
+/**
+ * Ajoute une adhésion (helper typé)
+ */
+export function addMembershipOrder(membership: Omit<MembershipOrder, 'id' | 'kind' | 'createdAt'>): MembershipOrder {
+  return addOrder({
+    kind: 'membership',
+    ...membership,
+  }) as MembershipOrder;
+}
+
+/**
+ * Supprime une commande du panier de manière optimisée
  */
 export function removeOrder(orderId: string): boolean {
   const orders = getOrders();
@@ -172,7 +303,7 @@ export function clearOrders(): void {
 }
 
 /**
- * Récupère une commande spécifique par son ID
+ * Récupère une commande spécifique par son ID avec recherche optimisée
  */
 export function getOrderById(orderId: string): Order | undefined {
   const orders = getOrders();
@@ -180,14 +311,26 @@ export function getOrderById(orderId: string): Order | undefined {
 }
 
 /**
- * Calcule le total du panier
+ * Calcule le total du panier de manière optimisée
  */
 export function calculateTotal(): number {
   const orders = getOrders();
-  return orders.reduce((total, order) => {
-    const price = (order as any).price || 0;
-    return total + Number(price);
-  }, 0);
+  return orders.reduce((total, order) => total + Number(order.price || 0), 0);
+}
+
+/**
+ * Calcule le total avec détails (sous-total, TVA, etc.)
+ */
+export function calculateDetailedTotal(taxRate: number = 0.2): {
+  subtotal: number;
+  tax: number;
+  total: number;
+} {
+  const subtotal = calculateTotal();
+  const tax = subtotal * taxRate;
+  const total = subtotal + tax;
+  
+  return { subtotal, tax, total };
 }
 
 /**
@@ -201,21 +344,21 @@ export function getOrderCount(): number {
  * Vérifie si le panier est vide
  */
 export function isCartEmpty(): boolean {
-  return getOrders().length === 0;
+  return getOrderCount() === 0;
 }
 
 /**
- * Récupère les commandes par type
+ * Récupère les commandes par type avec typage strict
  */
-export function getOrdersByKind(kind: 'booking' | 'racket'): Order[] {
+export function getOrdersByKind<T extends Order['kind']>(kind: T): Extract<Order, { kind: T }>[] {
   const orders = getOrders();
-  return orders.filter(order => order.kind === kind);
+  return orders.filter(order => order.kind === kind) as Extract<Order, { kind: T }>[];
 }
 
 /**
- * Met à jour une commande existante
+ * Met à jour une commande existante de manière optimisée
  */
-export function updateOrder(orderId: string, updates: Partial<Order>): boolean {
+export function updateOrder(orderId: string, updates: Partial<Omit<Order, 'id' | 'createdAt'>>): boolean {
   const orders = getOrders();
   const orderIndex = orders.findIndex(order => order.id === orderId);
   
@@ -223,36 +366,37 @@ export function updateOrder(orderId: string, updates: Partial<Order>): boolean {
     return false;
   }
   
-  orders[orderIndex] = {
+  const updatedOrder = {
     ...orders[orderIndex],
     ...updates,
     id: orderId, // Préserver l'ID
     createdAt: orders[orderIndex].createdAt, // Préserver la date de création
-  };
+  } as Order;
   
-  saveOrders(orders);
+  // Valider la commande mise à jour
+  if (!validateOrder(updatedOrder)) {
+    throw new Error('Mise à jour invalide');
+  }
+  
+  const updatedOrders = [...orders];
+  updatedOrders[orderIndex] = updatedOrder;
+  saveOrders(updatedOrders);
+  
   return true;
 }
 
 /**
- * Valide qu'une commande a tous les champs requis
+ * Duplique une commande existante
  */
-export function validateOrder(order: Order): boolean {
-  if (!order.id || !order.kind || !order.createdAt) {
-    return false;
+export function duplicateOrder(orderId: string): Order | null {
+  const order = getOrderById(orderId);
+  
+  if (!order) {
+    return null;
   }
   
-  if (order.kind === 'booking') {
-    const booking = order as BookingOrder;
-    return !!(booking.date && booking.time && booking.price !== undefined);
-  }
-  
-  if (order.kind === 'racket') {
-    const racket = order as RacketOrder;
-    return !!(racket.label && racket.price !== undefined);
-  }
-  
-  return false;
+  const { id, createdAt, ...orderData } = order;
+  return addOrder(orderData as Omit<Order, 'id' | 'createdAt'>);
 }
 
 /**
@@ -264,33 +408,74 @@ export function exportOrders(): string {
 }
 
 /**
- * Importe des commandes depuis un JSON
+ * Importe des commandes depuis un JSON avec validation
  */
-export function importOrders(jsonData: string): boolean {
+export function importOrders(jsonData: string, merge: boolean = false): boolean {
   try {
-    const orders = JSON.parse(jsonData);
+    const importedOrders = JSON.parse(jsonData);
     
-    if (!Array.isArray(orders)) {
-      throw new Error('Format invalide');
+    if (!Array.isArray(importedOrders)) {
+      throw new Error('Format invalide: doit être un tableau');
     }
     
     // Valider toutes les commandes
-    const validOrders = orders.filter(order => validateOrder(order));
+    const validOrders = importedOrders.filter(order => {
+      try {
+        return validateOrder(order);
+      } catch {
+        return false;
+      }
+    });
     
     if (validOrders.length === 0) {
       throw new Error('Aucune commande valide trouvée');
     }
     
-    saveOrders(validOrders);
+    if (merge) {
+      const existingOrders = getOrders();
+      const mergedOrders = [...existingOrders, ...validOrders];
+      saveOrders(mergedOrders);
+    } else {
+      saveOrders(validOrders);
+    }
+    
     return true;
   } catch (error) {
-    console.error('Erreur lors de l\'importation:', error);
+    console.error('[Orders] Erreur lors de l\'importation:', error);
     return false;
   }
 }
 
 /**
- * Nettoie le cache (utile pour les tests)
+ * Obtient des statistiques sur le panier
+ */
+export function getCartStats(): {
+  totalOrders: number;
+  totalAmount: number;
+  ordersByKind: Record<Order['kind'], number>;
+  averageOrderValue: number;
+} {
+  const orders = getOrders();
+  const totalOrders = orders.length;
+  const totalAmount = calculateTotal();
+  
+  const ordersByKind = orders.reduce((acc, order) => {
+    acc[order.kind] = (acc[order.kind] || 0) + 1;
+    return acc;
+  }, {} as Record<Order['kind'], number>);
+  
+  const averageOrderValue = totalOrders > 0 ? totalAmount / totalOrders : 0;
+  
+  return {
+    totalOrders,
+    totalAmount,
+    ordersByKind,
+    averageOrderValue,
+  };
+}
+
+/**
+ * Nettoie le cache (utile pour les tests et le debugging)
  */
 export function clearCache(): void {
   ordersCache = null;
@@ -301,4 +486,32 @@ export function clearCache(): void {
  */
 export function resetListeners(): void {
   listeners = [];
+}
+
+/**
+ * Réinitialise complètement le système (cache + listeners + storage)
+ */
+export function resetAll(): void {
+  clearCache();
+  resetListeners();
+  clearOrders();
+}
+
+/**
+ * Obtient des informations de debug
+ */
+export function getDebugInfo(): {
+  cacheEnabled: boolean;
+  cacheSize: number | null;
+  listenersCount: number;
+  lastUpdate: number;
+  storageKey: string;
+} {
+  return {
+    cacheEnabled: CACHE_ENABLED,
+    cacheSize: ordersCache?.length ?? null,
+    listenersCount: listeners.length,
+    lastUpdate: lastStorageUpdate,
+    storageKey: STORAGE_KEY,
+  };
 }

@@ -113,7 +113,7 @@ export function RacketRental() {
                                     if (!r) return;
                                     const racketOrder: Omit<RacketOrder, 'id' | 'createdAt'> = {
                                         kind: 'racket',
-                                        racketId: r.id,
+                                        racketId: r.id.toString(),
                                         label: `${r.brand} ${r.model}`.trim(),
                                         price: r.price,
                                     };

@@ -52,7 +52,7 @@ export function Booking() {
             time: selectedTime,
             name: formData.name,
             email: formData.email,
-            phone: formData.phone ? parseInt(formData.phone.replace(/\D/g, ''), 10) : undefined,
+            phone: formData.phone || undefined,
             notes: formData.notes,
             price: svc?.price ?? 0,
         };

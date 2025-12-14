@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { Navigation } from '@/components/Navigation';
-import { CourtsPage } from '@/components/Courts';
+import  Courts  from '@/components/Courts';
 import { MenuPage } from '@/components/Menu';
 import { RacketRental } from '@/components/RacketRental';
 import { Button } from '@/components/ui/button';
@@ -46,7 +46,7 @@ export default function ReservationPage() {
                         </TabsList>
 
                         <TabsContent value="courts">
-                            <CourtsPage />
+                            <Courts />
                         </TabsContent>
 
                         <TabsContent value="menu">
@@ -78,10 +78,10 @@ export default function ReservationPage() {
                                         <div key={o.id} className="flex items-center justify-between border-b pb-3">
                                             <div>
                                                 <div className="text-sm text-gray-500">{new Date(o.createdAt).toLocaleString()}</div>
-                                                {o.kind === 'court' && (
+                                                {o.kind === 'product' && (
                                                     <div className="font-medium">Terrain réservé: {(o as any).courtName} {(o as any).price ? `- ${(o as any).price.toFixed?.(2) || (o as any).price}€` : ''}</div>
                                                 )}
-                                                {o.kind === 'menu' && (
+                                                {o.kind === 'product' && (
                                                     <div>
                                                         <div className="font-medium">Commande snack/boissons - Total {(o as any).total.toFixed(2)}€</div>
                                                         <div className="text-sm text-gray-600">{(o as any).items.map((it: any) => `${it.name} x${it.quantity}`).join(', ')}</div>

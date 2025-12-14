@@ -8,8 +8,7 @@ import { Booking } from '@/components/Booking';
 import { About } from '@/components/About';
 import { Contact } from '@/components/Contact';
 import { Footer } from '@/components/Footer';
-import { CourtsPage } from '@/components/Courts';
-import { MenuPage } from '@/components/Menu';
+import Courts from '@/components/Courts';
 import { RacketRental } from '@/components/RacketRental';
 import { CartSidebar, type CartSidebarRef } from '@/components/CartSidebar';
 
@@ -26,7 +25,7 @@ export default function Home() {
       <Hero />
       <Services />
       <About />
-      <CourtsPage />
+      <Courts />
       <Booking />
       <RacketRental />
       {/* <MenuPage /> */}
