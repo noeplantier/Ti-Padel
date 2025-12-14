@@ -11,7 +11,13 @@ export interface BookingOrder extends Order {
   name?: string;
   courtId?: string;
   duration?: number;
+  serviceName?: string;
   price: number;
+  email?: string;
+  phone?: number;
+  notes?: string;
+  priceType?: 'standard' | 'member' | 'promo';
+
 }
 
 export interface RacketOrder extends Order {

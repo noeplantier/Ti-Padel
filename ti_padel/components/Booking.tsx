@@ -47,15 +47,14 @@ export function Booking() {
         const svc = services.find(s => s.id === selectedService);
         const bookingOrder: Omit<BookingOrder, 'id' | 'createdAt'> = {
             kind: 'booking',
-            serviceId: selectedService,
             serviceName: svc ? svc.name : selectedService,
             date: selectedDate.toISOString(),
             time: selectedTime,
             name: formData.name,
             email: formData.email,
-            phone: formData.phone,
+            phone: formData.phone ? parseInt(formData.phone.replace(/\D/g, ''), 10) : undefined,
             notes: formData.notes,
-            price: svc?.price,
+            price: svc?.price ?? 0,
         };
         addOrder(bookingOrder);
         alert('Votre réservation a été enregistrée. Paiement Stripe à configurer.');
