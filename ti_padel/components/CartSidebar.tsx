@@ -2,7 +2,7 @@
 
 import React, { useCallback, useEffect, useMemo, useState, forwardRef, useImperativeHandle } from 'react';
 import { loadStripe, type Stripe } from '@stripe/stripe-js';
-import { getOrders, removeOrder, clearOrders, type Order } from '@/lib/orders';
+import { getOrders, removeOrder, clearOrders, type Order, subscribeToOrders } from '@/lib/orders';
 
 type UIOrder = Order & { __total?: number };
 
@@ -16,357 +16,411 @@ export interface CartSidebarRef {
   close: () => void;
 }
 
-export const CartSidebar = forwardRef<CartSidebarRef>((props, ref) => {
+const formatEUR = (amount: number) => {
+  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(amount);
+};
+
+// Icônes SVG
+const CalendarIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+  </svg>
+);
+
+const ClockIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+  </svg>
+);
+
+const RacketIcon = () => (
+  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+  </svg>
+);
+
+const UserIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+  </svg>
+);
+
+const CourtIcon = () => (
+  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+  </svg>
+);
+
+function renderOrderLine(o: UIOrder) {
+  if (o.kind === 'racket') {
+    const label = (o as any).label || 'Raquette';
+    const price = (o as any).price || 0;
+    const quantity = (o as any).quantity || 1;
+    
+    return (
+      <div className="flex items-start gap-3">
+        <div className="flex-shrink-0 w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600">
+          <RacketIcon />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-semibold text-gray-900 mb-1">
+            Location de raquette
+          </div>
+          <div className="text-sm text-gray-600 flex items-center gap-2">
+            <span className="font-medium">{label}</span>
+            {quantity > 1 && (
+              <span className="text-xs bg-gray-200 px-2 py-0.5 rounded-full">
+                x{quantity}
+              </span>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  if (o.kind === 'booking') {
+    const date = (o as any).date ? new Date((o as any).date) : null;
+    const time = (o as any).time || '';
+    const name = (o as any).name || '';
+    const courtId = (o as any).courtId || '';
+    const duration = (o as any).duration || 60;
+    
+    return (
+      <div className="flex items-start gap-3">
+        <div className="flex-shrink-0 w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600">
+          <CalendarIcon />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="font-semibold text-gray-900 mb-2">
+            Réservation de terrain
+          </div>
+          <div className="space-y-1.5 text-sm text-gray-600">
+            {date && (
+              <div className="flex items-center gap-2">
+                <CalendarIcon />
+                <span>{date.toLocaleDateString('fr-FR', { 
+                  weekday: 'long', 
+                  day: 'numeric', 
+                  month: 'long', 
+                  year: 'numeric' 
+                })}</span>
+              </div>
+            )}
+            {time && (
+              <div className="flex items-center gap-2">
+                <ClockIcon />
+                <span>{time} ({duration} min)</span>
+              </div>
+            )}
+            {courtId && (
+              <div className="flex items-center gap-2">
+                <CourtIcon />
+                <span className="font-medium">Terrain {courtId}</span>
+              </div>
+            )}
+            {name && (
+              <div className="flex items-center gap-2">
+                <UserIcon />
+                <span className="italic">{name}</span>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    );
+  }
+  
+  return null;
+}
+
+const CartSidebar = forwardRef<CartSidebarRef>((props, ref) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [mounted, setMounted] = useState(false);
   const [orders, setOrders] = useState<UIOrder[]>([]);
-  const [payingId, setPayingId] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [busyClear, setBusyClear] = useState(false);
 
-  useImperativeHandle(ref, () => ({
-    open: () => setIsOpen(true),
-    close: () => setIsOpen(false),
-  }));
-
+  // Synchronisation en temps réel avec le localStorage
   useEffect(() => {
-    setMounted(true);
+    // Chargement initial
+    const loadOrders = () => {
+      const currentOrders = getOrders();
+      setOrders(currentOrders);
+    };
+    
+    loadOrders();
+
+    // Abonnement aux changements du panier
+    const unsubscribe = subscribeToOrders((updatedOrders) => {
+      setOrders(updatedOrders);
+    });
+
+    // Écoute des événements de storage pour la synchronisation entre onglets
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'tipadel-orders' || e.key === null) {
+        loadOrders();
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener('storage', handleStorageChange);
+    };
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-    setOrders(enrichTotals(getOrders()));
-    const onStorage = (e: StorageEvent) => {
-      if (!e.key || e.key === 'ti-padel-orders') setOrders(enrichTotals(getOrders()));
-    };
-    window.addEventListener('storage', onStorage);
-    return () => window.removeEventListener('storage', onStorage);
-  }, [mounted]);
-
-  const canPay = !isFakeStripe;
-
-  const stats = useMemo(() => {
-    const count = orders.length;
-    const total = orders.reduce((acc, o) => acc + Number(o.__total || 0), 0);
-    return { count, total };
+  // Calcul du total en temps réel
+  const total = useMemo(() => {
+    return orders.reduce((sum, order) => {
+      const price = (order as any).price || 0;
+      return sum + Number(price);
+    }, 0);
   }, [orders]);
 
-  const handleRemove = useCallback((id: string) => {
+  const itemCount = orders.length;
+
+  const open = useCallback(() => {
+    setIsOpen(true);
     setError(null);
-    const updated = removeOrder(id) as UIOrder[];
-    setOrders(enrichTotals(updated));
   }, []);
 
-  const handleClear = useCallback(async () => {
+  const close = useCallback(() => {
+    setIsOpen(false);
     setError(null);
-    if (!confirm('Voulez-vous vraiment supprimer toutes les commandes ?')) return;
+  }, []);
+
+  useImperativeHandle(ref, () => ({
+    open,
+    close,
+  }));
+
+  const handleRemoveOrder = useCallback((orderId: string) => {
+    removeOrder(orderId);
+    // La mise à jour se fera automatiquement via subscribeToOrders
+  }, []);
+
+  const handleClearOrders = useCallback(() => {
+    clearOrders();
+    // La mise à jour se fera automatiquement via subscribeToOrders
+  }, []);
+
+  const handleCheckout = useCallback(async () => {
+    if (orders.length === 0) return;
+
+    setIsLoading(true);
+    setError(null);
+
     try {
-      setBusyClear(true);
-      clearOrders();
-      setOrders([]);
-    } finally {
-      setBusyClear(false);
-    }
-  }, []);
-
-  const handlePay = useCallback(
-    async (o: UIOrder) => {
-      setError(null);
-      if (!canPay) {
-        setError('Paiement indisponible: configuration Stripe factice ou absente.');
+      if (isFakeStripe) {
+        // Mode démo
+        alert('Mode démo : Paiement simulé avec succès !');
+        handleClearOrders();
+        close();
         return;
       }
+
       const stripe = await stripePromise;
       if (!stripe) {
-        setError('Échec d\'initialisation de Stripe.');
-        return;
+        throw new Error('Stripe n\'a pas pu être chargé');
       }
-      try {
-        setPayingId(o.id);
-        const amount = Math.round(Number(o.__total || 0) * 100);
-        if (!Number.isFinite(amount) || amount <= 0) throw new Error('Montant invalide ou à 0.');
-        const payload = {
-          mode: 'payment',
-          currency: 'eur',
-          metadata: { orderId: o.id, kind: o.kind },
-          line_items: [
-            {
-              quantity: 1,
-              price_data: {
-                currency: 'eur',
-                unit_amount: amount,
-                product_data: {
-                  name: getOrderLabel(o),
-                  description: getOrderDescription(o),
-                },
-              },
-            },
-          ],
-          success_url: `${window.location.origin}/success?orderId=${encodeURIComponent(o.id)}`,
-          cancel_url: `${window.location.origin}/cancel?orderId=${encodeURIComponent(o.id)}`,
-        };
-        const res = await fetch('/api/create-checkout-session', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
-        });
-        if (!res.ok) throw new Error((await res.text()) || 'Création de session Stripe échouée.');
-        const data = await res.json();
-        if (data?.id) {
-          const { error: stripeErr } = await stripe.redirectToCheckout({ sessionId: data.id });
-          if (stripeErr) throw stripeErr;
-        } else if (data?.url) {
-          window.location.href = data.url as string;
-        } else {
-          throw new Error('Réponse Stripe invalide (ni sessionId ni url).');
-        }
-      } catch (e: any) {
-        setError(e?.message || 'Une erreur est survenue pendant le paiement.');
-      } finally {
-        setPayingId(null);
-      }
-    },
-    [canPay]
-  );
 
-  if (!mounted) return null;
+      // Créer une session de paiement
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orders }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erreur lors de la création de la session');
+      }
+
+      const { sessionId } = await response.json();
+
+      // Rediriger vers Stripe Checkout
+      const { error: stripeError } = await stripe.redirectToCheckout({ sessionId });
+
+      if (stripeError) {
+        throw new Error(stripeError.message);
+      }
+    } catch (err) {
+      console.error('Erreur de paiement:', err);
+      setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [orders, close, handleClearOrders]);
+
+  if (!isOpen) return null;
 
   return (
     <>
       {/* Overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 z-40 bg-black/50 transition-opacity duration-300"
-          onClick={() => setIsOpen(false)}
-          aria-hidden="true"
-        />
-      )}
+      <div 
+        className="fixed inset-0 bg-black/50 z-40 transition-opacity"
+        onClick={close}
+      />
 
       {/* Sidebar */}
-      <div
-        className={`fixed top-0 right-0 z-50 h-full w-full sm:w-[320px] lg:w-[420px] bg-white shadow-2xl transform transition-transform duration-300 ease-in-out ${
-          isOpen ? 'translate-x-0' : 'translate-x-full'
-        }`}
-      >
-        <div className="flex h-full flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between border-b border-gray-200 px-6 py-4">
-            <div>
-              <h2 className="text-2xl font-bold text-black">Panier</h2>
-              <p className="text-sm text-gray-600">{stats.count} commande{stats.count > 1 ? 's' : ''}</p>
-            </div>
-            <button
-              onClick={() => setIsOpen(false)}
-              className="rounded-lg p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
-              aria-label="Fermer le panier"
-            >
-              <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+      <div className="fixed right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl z-50 flex flex-col">
+        {/* Header */}
+        <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-green-50 to-blue-50">
+          <h2 className="text-xl font-bold text-gray-800 flex items-center gap-2">
+            <svg className="w-6 h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Mon Panier
+            {itemCount > 0 && (
+              <span className="text-sm font-normal text-gray-600">
+                ({itemCount} {itemCount === 1 ? 'article' : 'articles'})
+              </span>
+            )}
+          </h2>
+          <button
+            onClick={close}
+            className="text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded-full w-8 h-8 flex items-center justify-center transition-colors"
+            aria-label="Fermer le panier"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Cart Items */}
+        <div className="flex-1 overflow-y-auto p-4">
+          {orders.length === 0 ? (
+            <div className="text-center text-gray-500 py-12">
+              <svg className="w-16 h-16 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
               </svg>
-            </button>
-          </div>
-
-          {/* Stats Cards */}
-          <div className="border-b border-gray-200 px-6 py-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="rounded-lg border border-gray-200 bg-gray-50 p-4">
-                <div className="text-sm text-gray-600">Total</div>
-                <div className="text-2xl font-bold text-black">{formatEUR(stats.total)}</div>
-              </div>
-              <div className="flex items-center justify-center">
-                <button
-                  onClick={handleClear}
-                  disabled={orders.length === 0 || busyClear}
-                  className={`w-full rounded-lg px-4 py-2 text-sm font-medium text-white ${
-                    orders.length === 0 || busyClear
-                      ? 'bg-gray-400 cursor-not-allowed'
-                      : 'bg-red-600 hover:bg-red-700'
-                  }`}
+              <p className="text-lg font-medium">Votre panier est vide</p>
+              <p className="text-sm mt-2">Ajoutez des réservations ou des locations</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {orders.map((order) => (
+                <div
+                  key={order.id}
+                  className="border border-gray-200 rounded-xl p-4 bg-white hover:shadow-md transition-all duration-200 animate-fadeIn"
                 >
-                  {busyClear ? 'Nettoyage…' : 'Tout effacer'}
-                </button>
-              </div>
-            </div>
-            {!canPay && (
-              <div className="mt-3 rounded-lg bg-red-100 px-3 py-2 text-xs font-medium text-red-700">
-                ⚠️ Paiement désactivé
-              </div>
-            )}
-          </div>
-
-          {/* Error Alert */}
-          {error && (
-            <div className="mx-6 mt-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
-              {error}
-            </div>
-          )}
-
-          {/* Orders List - Scrollable */}
-          <div className="flex-1 overflow-y-auto px-6 py-4">
-            {orders.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center text-center">
-                <svg className="h-16 w-16 text-gray-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
-                </svg>
-                <p className="text-gray-600">Votre panier est vide</p>
-              </div>
-            ) : (
-              <div className="space-y-4">
-                {orders.map((o) => (
-                  <div key={o.id} className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
-                    <div className="flex items-start justify-between gap-3">
-                      <div className="min-w-0 flex-1">
-                        <div className="text-base font-semibold text-black">{getOrderLabel(o)}</div>
-                        <div className="mt-1 text-sm text-gray-600">{getOrderDescription(o)}</div>
-                        {o.createdAt && (
-                          <div className="mt-1 text-xs text-gray-500">{formatDateTime(o.createdAt)}</div>
-                        )}
-                        <div className="mt-2 text-sm text-gray-700">{renderOrderDetails(o)}</div>
-                        <div className="mt-3 text-lg font-bold text-emerald-600">
-                          {formatEUR(Number(o.__total || 0))}
-                        </div>
-                      </div>
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="flex-1">
+                      {renderOrderLine(order)}
                     </div>
-
-                    <div className="mt-4 flex gap-2">
-                      {canPay && (
-                        <button
-                          onClick={() => handlePay(o)}
-                          disabled={payingId === o.id}
-                          className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium text-white ${
-                            payingId === o.id ? 'bg-gray-400 cursor-wait' : 'bg-emerald-600 hover:bg-emerald-700'
-                          }`}
-                        >
-                          {payingId === o.id ? 'Paiement…' : 'Payer'}
-                        </button>
-                      )}
-                      <button
-                        onClick={() => handleRemove(o.id)}
-                        className="rounded-lg border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50"
-                      >
-                        Supprimer
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleRemoveOrder(order.id)}
+                      className="ml-3 text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full w-8 h-8 flex items-center justify-center transition-colors flex-shrink-0"
+                      aria-label="Supprimer"
+                    >
+                      <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                      </svg>
+                    </button>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* Footer - Checkout Button */}
-          {orders.length > 0 && canPay && (
-            <div className="border-t border-gray-200 px-6 py-4">
-              <button
-                className="w-full rounded-lg bg-emerald-600 px-6 py-4 text-lg font-semibold text-white hover:bg-emerald-700 transition-colors"
-                onClick={() => {
-                  if (orders.length === 1) {
-                    handlePay(orders[0]);
-                  } else {
-                    alert('Paiement groupé à venir - payez individuellement pour le moment');
-                  }
-                }}
-              >
-                Payer {formatEUR(stats.total)}
-              </button>
+                  <div className="flex justify-between items-center pt-3 border-t border-gray-100">
+                    <span className="text-sm text-gray-500">Prix</span>
+                    <span className="text-lg font-bold text-green-600">
+                      {formatEUR((order as any).price || 0)}
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
           )}
         </div>
+
+        {/* Footer */}
+        {orders.length > 0 && (
+          <div className="border-t p-4 bg-gray-50">
+            {error && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 text-red-700 rounded-lg text-sm flex items-start gap-2">
+                <svg className="w-5 h-5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+                <span>{error}</span>
+              </div>
+            )}
+
+            <div className="bg-white rounded-lg p-4 mb-4 shadow-sm">
+              <div className="flex justify-between items-center mb-2">
+                <span className="text-gray-600">Sous-total</span>
+                <span className="font-semibold">{formatEUR(total)}</span>
+              </div>
+              <div className="flex justify-between items-center text-sm text-gray-500">
+                <span>TVA incluse</span>
+                <span>{formatEUR(total * 0.2)}</span>
+              </div>
+              <div className="border-t border-gray-200 mt-3 pt-3 flex justify-between items-center">
+                <span className="text-lg font-bold text-gray-900">Total</span>
+                <span className="text-2xl font-bold text-green-600">
+                  {formatEUR(total)}
+                </span>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <button
+                onClick={handleCheckout}
+                disabled={isLoading}
+                className="w-full bg-gradient-to-r from-green-600 to-green-700 text-white py-3 rounded-lg font-semibold hover:from-green-700 hover:to-green-800 disabled:from-gray-400 disabled:to-gray-400 disabled:cursor-not-allowed transition-all shadow-lg hover:shadow-xl flex items-center justify-center gap-2"
+              >
+                {isLoading ? (
+                  <>
+                    <svg className="animate-spin h-5 w-5" fill="none" viewBox="0 0 24 24">
+                      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Traitement en cours...
+                  </>
+                ) : (
+                  <>
+                    <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                    </svg>
+                    Procéder au paiement
+                  </>
+                )}
+              </button>
+              
+              <button
+                onClick={handleClearOrders}
+                disabled={isLoading}
+                className="w-full bg-white border-2 border-gray-300 text-gray-700 py-2 rounded-lg hover:bg-gray-50 hover:border-gray-400 disabled:opacity-50 transition-colors flex items-center justify-center gap-2"
+              >
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                </svg>
+                Vider le panier
+              </button>
+            </div>
+          </div>
+        )}
       </div>
+
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(-10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        .animate-fadeIn {
+          animation: fadeIn 0.3s ease-out;
+        }
+      `}</style>
     </>
   );
 });
 
 CartSidebar.displayName = 'CartSidebar';
 
-// --- Utils ---
-function formatEUR(n: number) {
-  return new Intl.NumberFormat('fr-FR', { style: 'currency', currency: 'EUR' }).format(Number(n || 0));
-}
-
-function formatDateTime(v: any) {
-  try {
-    const d = new Date(v);
-    return Number.isNaN(d.getTime()) ? '' : d.toLocaleString('fr-FR');
-  } catch {
-    return '';
-  }
-}
-
-function getOrderLabel(o: Order) {
-  switch (o.kind) {
-    case 'court':
-      return `Terrain ${(o.courtName || '').toString().trim() || 'Inconnu'}`;
-    case 'menu':
-      return 'Snacks/Boissons';
-    case 'racket':
-      return `Location raquette${o.label ? ` - ${o.label}` : ''}`;
-    case 'booking':
-      return `Réservation ${(o.serviceName || '').toString().trim() || 'Inconnue'}`;
-    default:
-      return 'Commande';
-  }
-}
-
-function getOrderDescription(o: Order) {
-  if (o.kind === 'menu') {
-    const items = (o.items as { name: string; quantity: number }[] | undefined) || [];
-    return items.length ? items.map((it) => `${it.name} x${it.quantity}`).join(', ') : 'Commande snack';
-  }
-  if (o.kind === 'booking') {
-    const date = o.date ? new Date(o.date).toLocaleDateString('fr-FR') : '';
-    const time = (o as any).time || '';
-    const name = (o as any).name || '';
-    return [date && `${date} ${time}`, name].filter(Boolean).join(' — ');
-  }
-  if (o.kind === 'court') return (o as any).courtName || 'Court';
-  if (o.kind === 'racket') return (o as any).label || 'Raquette';
-  return 'Commande Ti Padel';
-}
-
-function getOrderTotal(o: Order) {
-  if (o.kind === 'menu') return Number((o as any).total || 0);
-  if (o.kind === 'racket') return Number((o as any).price || 0);
-  if (o.kind === 'court') return Number((o as any).price || 0);
-  if (o.kind === 'booking') return Number((o as any).price || 0);
-  return 0;
-}
-
-function enrichTotals(list: Order[]): UIOrder[] {
-  return (list || []).map((o) => ({ ...o, __total: getOrderTotal(o) }));
-}
-
-function renderOrderDetails(o: Order) {
-  if (o.kind === 'court') {
-    const price = (o as any).price;
-    const courtName = (o as any).courtName;
-    return <div>Terrain: {courtName} {price ? `- ${formatEUR(Number(price))}` : ''}</div>;
-  }
-  if (o.kind === 'menu') {
-    const items = (o.items as { name: string; quantity: number }[] | undefined) || [];
-    return (
-      <div>
-        <div>Articles:</div>
-        <div className="text-gray-600">{items.map((it) => `${it.name} x${it.quantity}`).join(', ') || '—'}</div>
-      </div>
-    );
-  }
-  if (o.kind === 'racket') {
-    const label = (o as any).label;
-    const price = (o as any).price;
-    return <div>Location raquette: {label} - {formatEUR(Number(price || 0))}</div>;
-  }
-  if (o.kind === 'booking') {
-    const date = (o as any).date ? new Date((o as any).date) : null;
-    const time = (o as any).time || '';
-    const name = (o as any).name || '';
-    return (
-      <div>
-        <div>Réservation:</div>
-        <div className="text-gray-600">
-          {date ? date.toLocaleDateString('fr-FR') : ''} {time ? `à ${time}` : ''} {name ? `— (${name})` : ''}
-        </div>
-      </div>
-    );
-  }
-  return null;
-}
+// Export par défaut ET nommé pour éviter les erreurs d'import
+export { CartSidebar };
+export default CartSidebar;

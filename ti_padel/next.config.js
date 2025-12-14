@@ -1,18 +1,12 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true, // Ignore ESLint pendant le build
+module.exports = {
+  async redirects() {
+    return [
+      {
+        source: '/:path*',
+        has: [{ type: 'host', value: 'ti-padel.com' }],
+        destination: 'https://ti-padel.com/:path*',
+        permanent: true,
+      },
+    ];
   },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
-  images: {
-    unoptimized: true
-  },
-  outputFileTracingRoot: process.cwd(),
-  experimental: {
-    esmExternals: false
-  }
-}
-
-module.exports = nextConfig
+};
