@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react';
 import { addBookingOrder } from '@/lib/orders';
+import { Button } from 'react-day-picker';
+import { ArrowRight } from 'lucide-react';
 
 interface Court {
     id: number;
@@ -80,7 +82,7 @@ export default function Courts() {
             occupied: false,
             hourlyRate: 35,
             capacity: 4,
-            features: ['Climatisation', 'Vestiaires VIP', 'Éclairage LED', 'Service premium'],
+            features: ['Climatisation', 'Vestiaires VIP', 'Éclairage LED'],
             nextAvailable: '15:00'
         },
     ]);
@@ -128,18 +130,20 @@ export default function Courts() {
         <section id="courts" className="py-20 bg-gradient-to-br from-gray-50 to-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="text-center mb-16">
-                    <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4">
+                    <h2 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
                         Nos Terrains
                     </h2>
                     <p className="text-xl text-gray-600 max-w-2xl mx-auto">
                         Des installations de qualité professionnelle pour tous les niveaux
                     </p>
-                    <button
-                        onClick={liberateAllCourts}
-                        className="mt-6 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                        Libérer tous les terrains
-                    </button>
+                 
+            <button 
+                onClick={liberateAllCourts}
+                className="bg-black text-white hover:bg-gray-800 px-6 py-2 text-lg group transition-all duration-300 rounded-lg font-semibold mt-6"
+            >
+                Libérer tous les terrains
+                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform duration-200 inline" />
+            </button>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -168,7 +172,7 @@ export default function Courts() {
                                         </div>
                                     </div>
                                     <div className="text-right">
-                                        <div className="text-3xl font-bold text-green-600">
+                                        <div className="text-3xl font-bold text-black">
                                             {court.hourlyRate}€
                                         </div>
                                         <div className="text-sm text-gray-600">
@@ -210,23 +214,14 @@ export default function Courts() {
                                     </div>
                                 </div>
 
-                                {/* Prochaine disponibilité */}
-                                {court.occupied && (
-                                    <div className="flex items-center gap-2 text-sm text-gray-600 pt-2">
-                                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                        </svg>
-                                        <span>Prochain créneau: {court.nextAvailable}</span>
-                                    </div>
-                                )}
-
+             
                                 {/* Bouton d'action */}
                                 <button
                                     onClick={() => toggleCourtStatus(court.id)}
                                     className={`w-full py-3 rounded-lg font-semibold transition-all ${
                                         court.occupied
-                                            ? 'bg-gray-200 text-gray-700 hover:bg-gray-300'
-                                            : 'bg-gradient-to-r from-green-600 to-green-700 text-white hover:from-green-700 hover:to-green-800 shadow-lg hover:shadow-xl'
+                                            ? 'bg-gray-200 text-gray-700 '
+                                            : 'bg-black text-white  shadow-lg hover:shadow-xl'
                                     }`}
                                 >
                                     {court.occupied ? 'Libérer le terrain' : 'Réserver maintenant'}
