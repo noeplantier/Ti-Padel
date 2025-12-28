@@ -1,65 +1,20 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
-  typescript: {
-    ignoreBuildErrors: true,
-  },
+  reactStrictMode: true,
+  
   images: {
-    unoptimized: true,
-    domains: ['ti-padel.com', 'www.ti-padel.com'],
-  },
-  outputFileTracingRoot: process.cwd(),
-  experimental: {
-    esmExternals: false
-  },
-  
-  // Configuration pour éviter les boucles de redirection
-  async redirects() {
-    return [
-      // Redirection WWW vers non-WWW (ou inversement selon votre préférence)
+    remotePatterns: [
       {
-        source: '/:path*',
-        has: [
-          {
-            type: 'host',
-            value: 'www.ti-padel.com',
-          },
-        ],
-        destination: 'https://ti-padel.com/:path*',
-        permanent: true,
+        protocol: 'https',
+        hostname: '**',
       },
-    ]
+    ],
+    unoptimized: process.env.NODE_ENV === 'development',
   },
 
-  // Headers de sécurité
-  async headers() {
-    return [
-      {
-        source: '/:path*',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
-          },
-        ],
-      },
-    ]
-  },
+  // Configuration Turbopack (vide pour utiliser les valeurs par défaut)
+  turbopack: {},
 
-  // Important: Désactiver le trailing slash qui peut causer des redirections
-  trailingSlash: false,
-  
-  // Éviter les redirections automatiques de Next.js
   skipTrailingSlashRedirect: true,
 }
 

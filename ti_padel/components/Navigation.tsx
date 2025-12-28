@@ -31,7 +31,7 @@ export function Navigation({ onCartClick }: NavigationProps) {
     <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-1 ${
       isScrolled ? 'bg-white/95 backdrop-blur-md shadow-sm' : 'bg-transparent'
     }`}>
-      <div className="max-w-7xl mx-auto px-0"> 
+      <div className="max-w-7xl mx-auto px-8 sm:px-4 lg:px-8"> 
         <div className="flex items-center justify-between h-16 w-full">
           {/* Logo à l'extrême gauche, sans marge */}
           <div className="ml-0">
